@@ -15,7 +15,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
+<<<<<<< HEAD
 namespace Eddie.Areas.Identity.Pages.Account
+=======
+namespace WebApplication3.Areas.Identity.Pages.Account
+>>>>>>> c9d7f6c (Initial commit)
 {
     public class LoginModel : PageModel
     {

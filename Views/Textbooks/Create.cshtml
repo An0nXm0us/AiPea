@@ -1,0 +1,47 @@
+﻿@model WebApplication3.Models.Textbook
+
+@{
+    ViewData["Title"] = "Create Textbook";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">Add a New Textbook</h2>
+            <hr />
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="textbookName" class="form-label"></label>
+                    <select asp-for="textbookName" class="form-select">
+                        <option value="">Select textbook</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Carbohydrates">Carbohydrates</option>
+                        <option value="Vegetable">Vegetable</option>
+                        <option value="Fruits">Fruits</option>
+                    </select>
+                    <span asp-validation-for="textbookName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="textbookModuleCode" class="form-label"></label>
+                    <input asp-for="textbookModuleCode" class="form-control" />
+                    <span asp-validation-for="textbookModuleCode" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="textbookAuthor" class="form-label"></label>
+                    <input asp-for="textbookAuthor" class="form-control" />
+                    <span asp-validation-for="textbookAuthor" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

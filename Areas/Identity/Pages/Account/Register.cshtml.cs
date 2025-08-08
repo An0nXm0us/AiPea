@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+<<<<<<< HEAD
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+=======
+>>>>>>> c9d7f6c (Initial commit)
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -18,8 +21,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+<<<<<<< HEAD
 
 namespace Eddie.Areas.Identity.Pages.Account
+=======
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
+using static WebApplication3.Models.Users;
+
+namespace WebApplication3.Areas.Identity.Pages.Account
+>>>>>>> c9d7f6c (Initial commit)
 {
     public class RegisterModel : PageModel
     {
@@ -78,7 +95,13 @@ namespace Eddie.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+<<<<<<< HEAD
 
+=======
+            [Required]
+            [Display(Name = "FullName")]
+            public string FullName { get; set; }
+>>>>>>> c9d7f6c (Initial commit)
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -125,6 +148,17 @@ namespace Eddie.Areas.Identity.Pages.Account
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+<<<<<<< HEAD
+=======
+                    var sysUser = new User
+                    {
+                        UserId = new Guid(userId).ToString(),
+                        FullName = Input.FullName,
+                        Password = Input.Password,
+                        Email = Input.Email,
+                    };
+
+>>>>>>> c9d7f6c (Initial commit)
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,

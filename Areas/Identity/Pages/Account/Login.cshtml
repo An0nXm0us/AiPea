@@ -5,6 +5,7 @@
     ViewData["Title"] = "Log in";
 }
 
+<<<<<<< HEAD
 <h1>@ViewData["Title"]</h1>
 <div class="row">
     <div class="col-md-4">
@@ -75,6 +76,35 @@
                 }
             }
         </section>
+=======
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+                    <form id="account" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <label asp-for="Input.Email">Email</label>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Password" class="form-control" type="password" autocomplete="current-password" aria-required="true" placeholder="Password" />
+                            <label asp-for="Input.Password">Password</label>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            <label class="form-check-label" asp-for="Input.RememberMe">Remember Me</label>
+                        </div>
+                        <button id="login-submit" type="submit" class="btn btn-primary w-100">Log in</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+>>>>>>> c9d7f6c (Initial commit)
     </div>
 </div>
 
