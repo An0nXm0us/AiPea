@@ -2,7 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+<<<<<<< HEAD
 namespace Eddie.Data.Migrations
+=======
+namespace WebApplication3.Data.Migrations
+>>>>>>> c9d7f6c (Initial commit)
 {
     public partial class CreateIdentitySchema : Migration
     {

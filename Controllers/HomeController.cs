@@ -1,8 +1,15 @@
 using System.Diagnostics;
+<<<<<<< HEAD
 using Eddie.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Eddie.Controllers
+=======
+using Microsoft.AspNetCore.Mvc;
+using WebApplication3.Models;
+
+namespace WebApplication3.Controllers
+>>>>>>> c9d7f6c (Initial commit)
 {
     public class HomeController : Controller
     {

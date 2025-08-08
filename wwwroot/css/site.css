@@ -19,6 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+<<<<<<< HEAD
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +29,6 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+=======
+>>>>>>> c9d7f6c (Initial commit)
 }
