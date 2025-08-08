@@ -1,0 +1,32 @@
+name: Run C# Unit Tests on the Use Cases
+
+on:
+
+push:
+branches:
+- Application-Business-Rules
+pull_request:
+branches:
+- Application-Business-Rules
+
+jobs:
+test:
+runs-on: ubuntu-latest
+
+steps:
+- name: Checkout code
+uses: actions/checkout@v4
+
+- name: Setup .NET SDK
+uses: actions/setup-dotnet@v4
+with:
+dotnet-version: '8.0.x' # Use whatever .NET version your project needs
+
+- name: Restore dependencies
+run: dotnet restore
+
+- name: Build the solution
+run: dotnet build -- no-restore
+
+- name: Run unit tests
+run: dotnet test -- no-build -- verbosity normal
