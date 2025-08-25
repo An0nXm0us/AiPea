@@ -13,6 +13,8 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
     fun onEvent(event: UserEvent)
     {
         when(event){
+            is UserEvent.setConfirmPassword -> _userState.update { it.copy(confirmPassword = event.password) }
+
             is UserEvent.deleteUser -> {
                 viewModelScope.launch{
                     dao.deleteUser(event.user)

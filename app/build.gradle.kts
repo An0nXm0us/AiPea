@@ -25,6 +25,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        testOptions {
+            unitTests.isIncludeAndroidResources = true
+        }
     }
 
     compileOptions {
@@ -61,4 +64,11 @@ dependencies {
     implementation(libs.androidx.room.ktx.v261)
     implementation(libs.kotlin.stdlib)
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0")
+    testImplementation("junit:junit:4.13.2")
+
+    // Coroutines testing
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Mockito for mocking
+    testImplementation("org.mockito:mockito-core:5.11.0")
 }
