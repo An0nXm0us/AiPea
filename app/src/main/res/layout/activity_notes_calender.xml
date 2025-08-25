@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context=".notesCalender"
+    android:id="@id/main">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calendar Page"
+        android:textColor="#08AE77"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_margin="16dp"/>
+    <!-- Main Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Calendar and Events"
+                android:textColor="#08AE77"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Calendar Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Date"
+                android:textColor="#08AE77"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="16dp"
+                android:theme="@style/GreenCalendarStyle"/>
+
+            <!-- Date Picker Button -->
+            <Button
+                android:id="@+id/btnDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pick a Date"
+                android:backgroundTint="#08AE77"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Events Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upcoming Events"
+                android:textColor="#08AE77"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Events RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/eventsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#F5F5F5"
+                android:padding="8dp"/>
+        </LinearLayout>
+    </ScrollView>
+    <!-- Bottom Navigation -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        android:elevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <!-- Home Button -->
+            <ImageButton
+                android:id="@+id/btnHome"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/home"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Home"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:padding="8dp"/>
+
+            <!-- Calendar Button -->
+            <ImageButton
+                android:id="@+id/btnCalendar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/calendar"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Calendar"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:padding="8dp"/>
+
+            <!-- Notes Button -->
+            <ImageButton
+                android:id="@+id/btnNotes"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/notes"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Notes"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:padding="8dp"/>
+
+            <!-- Subjects Button -->
+            <ImageButton
+                android:id="@+id/btnSubjects"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/subject"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Subjects"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:padding="8dp"/>
+
+            <!-- AI Button -->
+            <ImageButton
+                android:id="@+id/btnAI"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/aichat"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="AI Assistant"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                android:padding="8dp"/>
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

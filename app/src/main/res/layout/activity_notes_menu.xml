@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Top Bar -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/green">
+
+            <ImageView
+                android:id="@+id/btnClose"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_close"
+                app:tint="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:text="Create Module"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Form Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="574dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/form_background"
+            android:elevation="4dp"
+
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Input fields -->
+            <include layout="@layout/module_input_fields" />
+
+            <!-- Attachment Button -->
+            <Button
+                android:id="@+id/btnAttachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/attachment_button"
+                android:drawableLeft="@drawable/ic_attachment"
+                android:paddingHorizontal="16dp"
+                android:text="Attachment"
+                android:textColor="@color/black" />
+
+            <!-- Dropdown Menu -->
+            <LinearLayout
+                android:id="@+id/attachmentDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/dropdown_background"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    style="@style/DropdownItem"
+                    android:drawableLeft="@drawable/ic_image"
+                    android:tag="image">
+
+                    <TextView
+                        style="@style/DropdownText"
+                        android:text="Upload Image" />
+                </LinearLayout>
+
+                <View style="@style/DropdownDivider" />
+
+                <LinearLayout
+                    style="@style/DropdownItem"
+                    android:drawableLeft="@drawable/ic_video"
+                    android:tag="video">
+
+                    <TextView
+                        style="@style/DropdownText"
+                        android:text="Upload Video" />
+                </LinearLayout>
+
+                <View style="@style/DropdownDivider" />
+
+                <LinearLayout
+                    style="@style/DropdownItem"
+                    android:drawableLeft="@drawable/ic_audio"
+                    android:tag="audio">
+
+                    <TextView
+                        style="@style/DropdownText"
+                        android:text="Upload Audio" />
+                </LinearLayout>
+
+                <View style="@style/DropdownDivider" />
+
+                <LinearLayout
+                    style="@style/DropdownItem"
+                    android:drawableLeft="@drawable/ic_link"
+                    android:tag="link">
+
+                    <TextView
+                        style="@style/DropdownText"
+                        android:text="Paste a link" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Create Button -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="29dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/create_button"
+                android:text="Create"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
