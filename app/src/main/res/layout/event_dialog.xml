@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Add New Event"
+        android:textColor="#47904A"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/eventNameEditText"
+        android:layout_width="329dp"
+        android:layout_height="54dp"
+        android:hint="Event Name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.026" />
+
+    <EditText
+        android:id="@+id/eventDescriptionEditText"
+        android:layout_width="330dp"
+        android:layout_height="51dp"
+        android:hint="Event Description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventNameEditText"
+        app:layout_constraintVertical_bias="0.031" />
+
+    <Spinner
+        android:id="@+id/eventTypeSpinner"
+        android:layout_width="322dp"
+        android:layout_height="48dp"
+        android:backgroundTint="#8BC34A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventDescriptionEditText"
+        app:layout_constraintVertical_bias="0.051" />
+
+    <DatePicker
+        android:id="@+id/eventDatePicker"
+        android:layout_width="359dp"
+        android:layout_height="329dp"
+
+        android:headerBackground="#47904A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventTypeSpinner"
+        app:layout_constraintVertical_bias="0.283" />
+
+    <Button
+        android:id="@+id/saveEventButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4CAF50"
+        android:text="Save Event"
+        android:textColorLink="#2196F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventDatePicker" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
