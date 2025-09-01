@@ -5,38 +5,61 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.DatePicker
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.activity.viewModels
+import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.getValue
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
-class CalendarPage : AppCompatActivity() { // Changed from Fragment to AppCompatActivity
+class CalendarPage : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
     private lateinit var filterSpinner: Spinner
     private lateinit var addEventButton: Button
     private lateinit var selectedDateText: TextView
     private lateinit var eventsRecyclerView: RecyclerView
+    private lateinit var backButton: Button
+    private lateinit var switchButton: SwitchCompat
 
-    private val viewModel: CalendarViewModel by viewModels()
+    private lateinit var viewModel: CalendarViewModel
     private lateinit var eventsAdapter: EventsAdapter
+
+    // Database instance
+    private lateinit var database: CalendarDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar_page) // Set the layout directly
+        setContentView(R.layout.activity_calendar_page)
+
+        // Initialize database
+        database = CalendarDatabase.getDatabase(applicationContext)
+
+        // Initialize ViewModel with factory
+        val viewModelFactory = CalendarViewModelFactory(database.dao)
+        viewModel = ViewModelProvider(this, viewModelFactory)[CalendarViewModel::class.java]
 
         // Initialize views using findViewById
         calendarView = findViewById(R.id.calendarView)
         filterSpinner = findViewById(R.id.filterSpinner)
-        addEventButton = findViewById(R.id.saveBtn) // Use saveBtn instead of saveEventButton
+        addEventButton = findViewById(R.id.saveBtn)
         selectedDateText = findViewById(R.id.calendarPageTitle)
         eventsRecyclerView = findViewById(R.id.eventsRecyclerView)
+        backButton = findViewById(R.id.backBtn)
+        switchButton = findViewById(R.id.displayPeriod)
 
         setupRecyclerView()
         setupCalendar()
@@ -50,8 +73,11 @@ class CalendarPage : AppCompatActivity() { // Changed from Fragment to AppCompat
                 updateSelectedDateText(state.selectedDate)
             }
         }
-    }
 
+        backButton.setOnClickListener {
+            finish()
+        }
+    }
 
     private fun setupRecyclerView() {
         eventsAdapter = EventsAdapter { event ->
@@ -59,7 +85,7 @@ class CalendarPage : AppCompatActivity() { // Changed from Fragment to AppCompat
         }
 
         eventsRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@CalendarPage) // Changed from requireContext()
+            layoutManager = LinearLayoutManager(this@CalendarPage)
             adapter = eventsAdapter
         }
     }

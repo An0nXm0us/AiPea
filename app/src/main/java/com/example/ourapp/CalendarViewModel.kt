@@ -94,14 +94,14 @@ class CalendarViewModel(private val dao: CalendarDao): ViewModel() {
 
                 viewModelScope.launch {
                     dao.insertEvent(calendarEvent)
-                    _state.update { it.copy(
-                        isAddingEvent = false,
-                        eventName = "",
-                        eventDescription = "",
-                        eventType = "",
-                        eventDate = Date()
-                    )}
                 }
+                _state.update { it.copy(
+                    isAddingEvent = false,
+                    eventName = "",
+                    eventDescription = "",
+                    eventType = "",
+                    eventDate = Date()
+                )}
             }
             is CalendarEvent.setEventDescription -> {
                 _state.update { it.copy(
