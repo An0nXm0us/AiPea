@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -20,5 +21,10 @@ interface UserDao {
 
     @Query("SELECT * FROM User WHERE firstName = :username")
     suspend fun getUserByUsername(username: String): User?
+
+    @Query("SELECT * FROM User WHERE userId = :userId")
+    suspend fun getUserById(userId: String): User?
+
+
 
 }

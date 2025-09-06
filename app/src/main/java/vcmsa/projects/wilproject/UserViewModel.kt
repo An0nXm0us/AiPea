@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 class UserViewModel(private val dao: UserDao) : ViewModel() {
     private val _userState = MutableStateFlow(UserState())
     val userState = _userState.asStateFlow()
+
     fun onEvent(event: UserEvent)
     {
         when(event){
@@ -22,13 +23,14 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
                 val fullName = userState.value.firstName
                 val password = userState.value.password
                 val email = userState.value.email
+                val checkedEmail = _userState.equals(UserState::isValid)
 
                 if(fullName.isBlank() || password.isBlank() || email.isBlank())
                 {
                     _userState.update { it.copy(errorMessage = "All fields are required.") }
                     return
                 }
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                if (checkedEmail) {
                     _userState.update { it.copy(errorMessage = "Invalid email address.") }
                     return
                 }
@@ -60,6 +62,7 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
                 }
             }
             is UserEvent.setEmail -> {
+
                 _userState.update { it.copy(
                     email = event.email,
                     errorMessage = null

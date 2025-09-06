@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class LoginViewModel(private val dao: UserDao) : ViewModel() {
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState.asStateFlow()
+    private var _loggedInUser: User? = null
 
     fun onEvent(event: LoginEvent) {
         when (event) {
@@ -81,7 +82,7 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
                 }
 
                 Log.d("LoginViewModel", "Password match successful. Login complete.")
-
+                _loggedInUser = user
                 _loginState.update {
                     it.copy(
                         isLoading = false,
@@ -89,6 +90,14 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
                         errorMessage = null
                     )
                 }
+                _loginState.update {
+                    it.copy(
+                        isLoading = false,
+                        isSuccess = true,
+                        errorMessage = null
+                    )
+                }
+
 
             } catch (e: Exception) {
                 Log.e("LoginViewModel", "Login attempt failed with exception: ${e.message}")

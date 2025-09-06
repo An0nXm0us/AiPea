@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NotesAdd">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:minHeight="48dp"
+        android:text="Add Notes..."
+        android:textColor="@color/forest_green"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+
+    <EditText
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_shape"
+        android:hint="Tittle"
+        android:id="@+id/edTitle"
+        android:paddingLeft="10dp"
+        android:elevation="2dp"
+        android:textColor="@color/medium_sea_green"
+        android:textColorHint="@color/dark_green"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"/>
+
+    <EditText
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_shape"
+        android:hint="Description"
+        android:paddingTop="10dp"
+        android:id="@+id/edDesc"
+        android:paddingLeft="10dp"
+        android:gravity="top"
+        android:textColor="@color/medium_sea_green"
+        android:textColorHint="@color/dark_green"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
+
+
+
+
+    <Button
+        android:id="@+id/addButton"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:elevation="2dp"
+        android:text="Add Note..."
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/edit_shape"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"/>
+</LinearLayout>

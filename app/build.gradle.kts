@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.room.runtime.android)
+    implementation(libs.androidx.gridlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -59,6 +60,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx.v261)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
     implementation(libs.kotlin.stdlib)
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0")
 }

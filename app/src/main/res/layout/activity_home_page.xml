@@ -28,6 +28,20 @@
             android:textStyle="bold"
             android:layout_marginStart="16dp"
             android:layout_gravity="center_vertical"/>
+
+        <Button
+            android:id="@+id/button12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Notes" />
+
+        <Button
+            android:id="@+id/btn_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Log out" />
     </LinearLayout>
 
     <!-- Welcome message -->
@@ -41,6 +55,7 @@
 
     <!-- Main feature buttons grid -->
     <GridLayout
+        android:id="@+id/grid_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
@@ -61,27 +76,26 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
+                android:layout_height="147dp"
                 android:backgroundTint="@color/green"
-                android:padding="16dp"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/calendar"
-                    />
+                    android:src="@drawable/calendar" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="Calendar"
-                    android:textSize="16sp"
                     android:textColor="@android:color/black"
-                    android:layout_marginTop="8dp"/>
+                    android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -105,11 +119,12 @@
                 android:clickable="true"
                 android:focusable="true">
 
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                <ImageButton
+                    android:layout_width="59dp"
+                    android:layout_height="68dp"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/notes"
-                   />
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:layout_width="wrap_content"
