@@ -6,10 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
-@Database(
-    entities = [CalendarSchedule::class],
-    version = 1
-)
+/**
+ * Room database for calendar events.
+ */
+@Database(entities = [CalendarSchedule::class], version = 1)
 @TypeConverters(DateConverter::class)
 abstract class CalendarDatabase : RoomDatabase() {
     abstract val dao: CalendarDao
@@ -17,6 +17,9 @@ abstract class CalendarDatabase : RoomDatabase() {
     companion object {
         @Volatile private var INSTANCE: CalendarDatabase? = null
 
+        /**
+         * Return singleton DB instance.
+         */
         fun getDatabase(context: Context): CalendarDatabase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(

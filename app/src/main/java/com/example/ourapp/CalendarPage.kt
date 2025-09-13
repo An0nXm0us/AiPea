@@ -11,6 +11,8 @@ import android.widget.Button
 import android.widget.CalendarView
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.ImageButton
+import androidx.appcompat.widget.AppCompatImageButton // Import AppCompatImage
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +27,12 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/**
+ * Activity that shows a calendar and list of events.
+ * - User can select date or toggle weekly period.
+ * - User can filter by type via spinner.
+ * - User can add events via a dialog.
+ */
 class CalendarPage : AppCompatActivity() {
 
     private lateinit var calendarView: CalendarView
@@ -32,7 +40,7 @@ class CalendarPage : AppCompatActivity() {
     private lateinit var addEventButton: Button
     private lateinit var selectedDateText: TextView
     private lateinit var eventsRecyclerView: RecyclerView
-    private lateinit var backButton: Button
+    private lateinit var backButton: ImageButton
     private lateinit var switchButton: SwitchCompat
 
     private lateinit var viewModel: CalendarViewModel
@@ -45,14 +53,12 @@ class CalendarPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar_page)
 
-        // Initialize database
+        // Initialize database and viewmodel
         database = CalendarDatabase.getDatabase(applicationContext)
+        val factory = CalendarViewModelFactory(database.dao)
+        viewModel = ViewModelProvider(this, factory)[CalendarViewModel::class.java]
 
-        // Initialize ViewModel with factory
-        val viewModelFactory = CalendarViewModelFactory(database.dao)
-        viewModel = ViewModelProvider(this, viewModelFactory)[CalendarViewModel::class.java]
-
-        // Initialize views using findViewById
+        // find views
         calendarView = findViewById(R.id.calendarView)
         filterSpinner = findViewById(R.id.filterSpinner)
         addEventButton = findViewById(R.id.saveBtn)
@@ -65,8 +71,9 @@ class CalendarPage : AppCompatActivity() {
         setupCalendar()
         setupFilterSpinner()
         setupAddEventButton()
+        setupSwitch()
 
-        // Observe events changes
+        // Observe view model state and bind to UI
         lifecycleScope.launch {
             viewModel.state.collect { state ->
                 eventsAdapter.submitList(state.events)
@@ -74,13 +81,15 @@ class CalendarPage : AppCompatActivity() {
             }
         }
 
-        backButton.setOnClickListener {
-            finish()
-        }
+        backButton.setOnClickListener { finish() }
     }
 
+    /**
+     * Configure RecyclerView and adapter
+     */
     private fun setupRecyclerView() {
         eventsAdapter = EventsAdapter { event ->
+            // Delete click callback
             viewModel.onEvent(CalendarEvent.deleteEvent(event))
         }
 
@@ -90,15 +99,21 @@ class CalendarPage : AppCompatActivity() {
         }
     }
 
+    /**
+     * Hook calendar date selection to the ViewModel.
+     */
     private fun setupCalendar() {
         calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            val calendar = Calendar.getInstance().apply {
+            val cal = Calendar.getInstance().apply {
                 set(year, month, dayOfMonth)
             }
-            viewModel.onEvent(CalendarEvent.selectDate(calendar.time))
+            viewModel.onEvent(CalendarEvent.selectDate(cal.time))
         }
     }
 
+    /**
+     * Configure filter spinner to send filter events to ViewModel.
+     */
     private fun setupFilterSpinner() {
         val adapter = ArrayAdapter.createFromResource(
             this@CalendarPage,
@@ -121,9 +136,17 @@ class CalendarPage : AppCompatActivity() {
         }
     }
 
+    /**
+     * Show dialog to add an event, read input and forward to ViewModel.
+     */
     private fun setupAddEventButton() {
-        addEventButton.setOnClickListener {
-            showAddEventDialog()
+        addEventButton.setOnClickListener { showAddEventDialog() }
+    }
+
+    private fun setupSwitch() {
+        // Toggle weekly period mode
+        switchButton.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.onEvent(CalendarEvent.togglePeriod(isChecked))
         }
     }
 
@@ -138,44 +161,59 @@ class CalendarPage : AppCompatActivity() {
         val eventTypeSpinner = dialogView.findViewById<Spinner>(R.id.eventTypeSpinner)
         val eventDatePicker = dialogView.findViewById<DatePicker>(R.id.eventDatePicker)
         val saveEventButton = dialogView.findViewById<Button>(R.id.saveEventButton)
+        val cancelButton = dialogView.findViewById<Button>(R.id.cancelEventButton)
 
+        // spinner adapter uses same resource
         val typeAdapter = ArrayAdapter.createFromResource(
             this@CalendarPage,
             R.array.event_types,
             android.R.layout.simple_spinner_item
-        ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        }
+        ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         eventTypeSpinner.adapter = typeAdapter
 
         saveEventButton.setOnClickListener {
-            val calendar = Calendar.getInstance().apply {
+            val cal = Calendar.getInstance().apply {
                 set(eventDatePicker.year, eventDatePicker.month, eventDatePicker.dayOfMonth)
             }
 
             viewModel.onEvent(CalendarEvent.setEventName(eventNameEditText.text.toString()))
             viewModel.onEvent(CalendarEvent.setEventDescription(eventDescriptionEditText.text.toString()))
             viewModel.onEvent(CalendarEvent.setEventType(eventTypeSpinner.selectedItem.toString()))
-            viewModel.onEvent(CalendarEvent.setEventDate(calendar.time))
+            viewModel.onEvent(CalendarEvent.setEventDate(cal.time))
             viewModel.onEvent(CalendarEvent.saveEvent)
 
+            dialog.dismiss()
+        }
+
+        cancelButton.setOnClickListener {
             dialog.dismiss()
         }
 
         dialog.show()
     }
 
+    /**
+     * Update top title to show currently selected date (for clarity).
+     */
     private fun updateSelectedDateText(date: Date) {
         val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
         selectedDateText.text = "Events for ${dateFormat.format(date)}"
     }
 
+    /**
+     * EventsAdapter: inner RecyclerView.Adapter implementation.
+     * - Binds CalendarSchedule to event_item.xml layout.
+     * - onDeleteClick is invoked when the delete button is tapped.
+     */
     private inner class EventsAdapter(
         private val onDeleteClick: (CalendarSchedule) -> Unit
     ) : RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
 
         private var events = emptyList<CalendarSchedule>()
 
+        /**
+         * Replace adapter list and refresh UI.
+         */
         fun submitList(newEvents: List<CalendarSchedule>) {
             events = newEvents
             notifyDataSetChanged()
@@ -193,13 +231,24 @@ class CalendarPage : AppCompatActivity() {
         override fun getItemCount(): Int = events.size
 
         inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            private val nameTv: TextView = itemView.findViewById(R.id.eventNameTextView)
+            private val descTv: TextView = itemView.findViewById(R.id.eventDescriptionTextView)
+            private val dateTv: TextView = itemView.findViewById(R.id.eventDateTextView)
+            private val typeTv: TextView = itemView.findViewById(R.id.eventTypeTextView)
+            private val deleteBtn: Button = itemView.findViewById(R.id.deleteEventButton)
+
+            /**
+             * Bind event fields to views and set delete listener.
+             */
             fun bind(event: CalendarSchedule) {
-                itemView.findViewById<TextView>(R.id.eventNameTextView).text = event.eventName
-                itemView.findViewById<TextView>(R.id.eventDescriptionTextView).text = event.eventDescription
-                val dateFormat = SimpleDateFormat("MMM d, yyyy 'at' h:mm a", Locale.getDefault())
-                itemView.findViewById<TextView>(R.id.eventDateTextView).text = dateFormat.format(event.eventDate)
-                itemView.findViewById<TextView>(R.id.eventTypeTextView).text = event.eventType
-                itemView.findViewById<Button>(R.id.deleteEventButton).setOnClickListener {
+                nameTv.text = event.eventName
+                descTv.text = event.eventDescription
+                typeTv.text = event.eventType
+
+                val dateFormat = SimpleDateFormat("EEE, MMM d, yyyy 'at' h:mm a", Locale.getDefault())
+                dateTv.text = dateFormat.format(event.eventDate)
+
+                deleteBtn.setOnClickListener {
                     onDeleteClick(event)
                 }
             }

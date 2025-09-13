@@ -1,6 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
+    // It's good practice to use aliases here too if defined in your catalog for consistency
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+    alias(libs.plugins.kotlin.android) version "2.2.20" apply false // Use the alias
+    alias(libs.plugins.ksp) apply false          // Use the alias
 }

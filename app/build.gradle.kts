@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("org.jetbrains.kotlin.kapt") // Apply the Kapt plugin
-    id("com.google.devtools.ksp") //Apply KSP - remove 'version' and 'apply false'
+
+    id("com.google.devtools.ksp")//Apply KSP - remove 'version' and 'apply false'
 }
 
 android {
@@ -21,6 +21,12 @@ android {
 
     buildFeatures {
         viewBinding = true
+    }
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+        }
     }
 
     buildTypes {
@@ -58,6 +64,10 @@ dependencies {
     implementation(libs.androidx.appcompat.v171)
     // Other dependencies
     implementation(libs.androidx.room.runtime)
+
+
+    implementation(libs.kotlin.bom)
+
 
     ksp(libs.androidx.room.compiler.v250) // For Kotlin
     implementation(libs.androidx.room.ktx) // Kotlin Extensions

@@ -3,6 +3,9 @@ package com.example.ourapp
 import androidx.room.TypeConverter
 import java.util.Date
 
+/**
+ * Converts Date to Long and back so Room can persist Date fields.
+ */
 class DateConverter {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {

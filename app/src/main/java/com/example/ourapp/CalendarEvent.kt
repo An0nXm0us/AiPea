@@ -2,6 +2,9 @@ package com.example.ourapp
 
 import java.util.Date
 
+/**
+ * UI events that CalendarViewModel understands (user actions).
+ */
 sealed interface CalendarEvent {
     object saveEvent: CalendarEvent
     data class setEventName(val eventName: String): CalendarEvent
@@ -12,6 +15,7 @@ sealed interface CalendarEvent {
     object hideDialog: CalendarEvent
     data class sortEvent(val sortType: SortType): CalendarEvent
     data class deleteEvent(val event: CalendarSchedule): CalendarEvent
-    data class selectDate(val date: Date): CalendarEvent  // Added for date selection
-    data class filterByType(val eventType: String?): CalendarEvent  // Added for filtering
+    data class selectDate(val date: Date): CalendarEvent
+    data class filterByType(val eventType: String?): CalendarEvent
+    data class togglePeriod(val enabled: Boolean): CalendarEvent // toggles weekly period mode
 }

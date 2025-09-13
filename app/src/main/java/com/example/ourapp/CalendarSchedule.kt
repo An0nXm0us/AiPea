@@ -4,13 +4,16 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
+/**
+ * Entity representing an event in the calendar.
+ * Stored in Room table "events".
+ */
 @Entity(tableName = "events")
 data class CalendarSchedule(
-    //data used for eventScheduling
     val eventName: String,
     val eventType: String,
     val eventDescription: String,
-    val eventDate: Date, // Added date field
+    val eventDate: Date,
     @PrimaryKey(autoGenerate = true)
     val eventId: Int = 0,
 )
