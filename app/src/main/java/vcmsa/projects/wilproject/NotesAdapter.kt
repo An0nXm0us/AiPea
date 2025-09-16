@@ -30,14 +30,14 @@ class NotesAdapter(
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleTextView: TextView = itemView.findViewById(R.id.noteTitleTextView)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.noteDescriptionTextView)
-        private val dateTextView: TextView = itemView.findViewById(R.id.noteDateTextView)
+        //private val dateTextView: TextView = itemView.findViewById(R.id.noteDateTextView)
 
         fun bind(note: Notes) {
             titleTextView.text = note.title
             descriptionTextView.text = note.description
 
 
-            dateTextView.text = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(this)
+            //dateTextView.text = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(this)
 
             itemView.setOnClickListener {
                 onNoteClick(note)
