@@ -1,5 +1,6 @@
 package vcmsa.projects.wilproject
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -53,6 +54,8 @@ class NotesAdd : AppCompatActivity() {
 
         addButton.setOnClickListener {
             addNote()
+            intent = Intent(this, NotesFront::class.java)
+            startActivity(intent)
         }
     }
 
