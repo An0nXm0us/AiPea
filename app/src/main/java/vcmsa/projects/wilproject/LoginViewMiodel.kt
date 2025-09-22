@@ -23,9 +23,9 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
         val digest = md.digest(bytes)
         return digest.fold("") { str, byte -> str + "%02x".format(byte) }
     }
-    fun verifyPassword(inputPassword : String, hashedPassword: String): Boolean {
-        val inputPassword = hasPass(hashedPassword)
-        return inputPassword== hashedPassword
+    fun verifyPassword(providedPassword: String, storedHash: String): Boolean {
+        val providedPasswordHash = hasPass(providedPassword)
+        return providedPasswordHash == storedHash
     }
     fun onEvent(event: LoginEvent) {
         when (event) {

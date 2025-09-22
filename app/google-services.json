@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "774449381544",
+    "project_id": "aipea-1c3e4",
+    "storage_bucket": "aipea-1c3e4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774449381544:android:2fa5a2b5b295b95842429d",
+        "android_client_info": {
+          "package_name": "com.example.calendar20"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl-tK6dtiieNhWWdy8nH8PPoW8isvVD1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:774449381544:android:2e7b871725a34cbe42429d",
+        "android_client_info": {
+          "package_name": "vcmsa.projects.wilproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl-tK6dtiieNhWWdy8nH8PPoW8isvVD1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
