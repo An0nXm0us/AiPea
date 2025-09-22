@@ -1,6 +1,6 @@
 package vcmsa.projects.wilproject
 
-import android.util.Log // Import the Log class
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,12 +9,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 
 class LoginViewModel(private val dao: UserDao) : ViewModel() {
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState.asStateFlow()
     private var _loggedInUser: User? = null
 
+    fun hasPass(hashPassword : String): String
+    {
+        val bytes = hashPassword.toByteArray(Charsets.UTF_8)
+        val md = MessageDigest.getInstance("SHA-512")
+        val digest = md.digest(bytes)
+        return digest.fold("") { str, byte -> str + "%02x".format(byte) }
+    }
+    fun verifyPassword(inputPassword : String, hashedPassword: String): Boolean {
+        val inputPassword = hasPass(hashedPassword)
+        return inputPassword== hashedPassword
+    }
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.checkUsername -> {
@@ -49,7 +61,7 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
             _loginState.update { it.copy(isLoading = true, errorMessage = null) }
 
             try {
-               var user = dao.getUserByUsername(state.username)
+                var user = dao.getUserByUsername(state.username)
 
 
                 if (user == null && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()) {
@@ -62,7 +74,7 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
                     _loginState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = "User not found"
+                            errorMessage = "Invalid username or password"
                         )
                     }
                     return@launch
@@ -70,12 +82,12 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
 
                 Log.d("LoginViewModel", "User lookup successful. User found: ${user.email}")
 
-                if (user.password != state.password) {
+                 if (!verifyPassword(state.password, user.password)) {
                     Log.d("LoginViewModel", "Password mismatch.")
                     _loginState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = "Invalid password"
+                            errorMessage = "Invalid username or password"
                         )
                     }
                     return@launch
@@ -90,14 +102,6 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
                         errorMessage = null
                     )
                 }
-                _loginState.update {
-                    it.copy(
-                        isLoading = false,
-                        isSuccess = true,
-                        errorMessage = null
-                    )
-                }
-
 
             } catch (e: Exception) {
                 Log.e("LoginViewModel", "Login attempt failed with exception: ${e.message}")

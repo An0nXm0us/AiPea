@@ -26,14 +26,6 @@ class SessionManager(context: Context) {
         return sharedPreferences.getString(KEY_USER_ID, null)
     }
 
-    fun getUserEmail(): String? {
-        return sharedPreferences.getString(KEY_USER_EMAIL, null)
-    }
-
-    fun getUserName(): String? {
-        return sharedPreferences.getString(KEY_USER_NAME, null)
-    }
-
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false) && getUserId() != null
     }

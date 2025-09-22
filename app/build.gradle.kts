@@ -69,4 +69,15 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+
+    //hashing
+    implementation(project.dependencies.platform("org.kotlincrypto.hash:bom:0.8.0"))
+    implementation("org.kotlincrypto.hash:md")
+
+    implementation("org.kotlincrypto.hash:sha1")
+
+
+    implementation("org.kotlincrypto.hash:sha2")
+    implementation("org.kotlincrypto.hash:sha3")
+    implementation("org.kotlincrypto.hash:blake2")
 }

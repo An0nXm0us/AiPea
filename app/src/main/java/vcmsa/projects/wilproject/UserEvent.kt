@@ -6,5 +6,6 @@ sealed interface UserEvent {
     data class setPassword(val password: String):UserEvent
     data class setEmail(val email: String):UserEvent
     data class deleteUser(val user : User):UserEvent
+
 }
 
