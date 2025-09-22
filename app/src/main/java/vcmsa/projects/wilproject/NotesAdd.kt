@@ -12,7 +12,6 @@ import androidx.room.Room
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class NotesAdd : AppCompatActivity() {
 
@@ -38,7 +37,7 @@ class NotesAdd : AppCompatActivity() {
         ).build()
 
         // Initialize session manager
-        sessionManager = SessionManager(this)
+        sessionManager = SessionManager()
 
         // Initialize ViewModel
         viewModel = ViewModelProvider(

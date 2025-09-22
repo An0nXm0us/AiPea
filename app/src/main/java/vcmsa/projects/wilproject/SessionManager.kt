@@ -3,7 +3,7 @@ package vcmsa.projects.wilproject
 import android.content.Context
 import android.content.SharedPreferences
 
-class SessionManager(context: Context) {
+open class SessionManager() {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
     companion object {
@@ -22,7 +22,7 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
-    fun getUserId(): String? {
+    open fun getUserId(): String? {
         return sharedPreferences.getString(KEY_USER_ID, null)
     }
 
