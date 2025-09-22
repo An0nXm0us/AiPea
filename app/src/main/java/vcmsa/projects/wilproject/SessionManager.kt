@@ -3,7 +3,7 @@ package vcmsa.projects.wilproject
 import android.content.Context
 import android.content.SharedPreferences
 
-open class SessionManager() {
+open class SessionManager(context: Context) {
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
     companion object {

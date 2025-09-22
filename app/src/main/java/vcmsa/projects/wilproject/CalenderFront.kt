@@ -45,7 +45,7 @@ class CalenderFront : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes_calender)
 
-        sessionManager = SessionManager()
+        sessionManager = SessionManager(applicationContext)
 
         // Initialize views using findViewById
         filterSpinner = findViewById(R.id.filterSpinner)

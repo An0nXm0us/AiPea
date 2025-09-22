@@ -22,7 +22,7 @@ class HomePage : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        sessionManager = SessionManager()
+        sessionManager = SessionManager(this)
         notesBtn = findViewById(R.id.button12)
         notesBtn.setOnClickListener {
             val intent = Intent(this, CalenderFront::class.java )

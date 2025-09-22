@@ -1,8 +1,7 @@
 package vcmsa.projects.wilproject
 
-class FakeSessionManager(private val userId: String = "testUser") : SessionManager(
-
-) {
-    override fun getUserId(): String = userId
-    // stub any other methods if you have them
+// Notice: we don't extend SessionManager, just create a stand-in
+class FakeSessionManager(private val userId: String = "testUser") {
+    fun getUserId(): String = userId
+    fun isLoggedIn(): Boolean = true
 }

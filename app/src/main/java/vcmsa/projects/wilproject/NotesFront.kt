@@ -8,10 +8,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NotesFront : AppCompatActivity() {
 
@@ -33,7 +37,7 @@ class NotesFront : AppCompatActivity() {
         // getDatabase
         val database = EddieDatabase.getDatabase(applicationContext)
 
-        sessionManager = SessionManager()
+        sessionManager = SessionManager(this)
 
         viewModel = ViewModelProvider(
             this,

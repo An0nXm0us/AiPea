@@ -7,12 +7,17 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,11 +41,11 @@ class Login : AppCompatActivity() {
             EddieDatabase::class.java,
             "eddieDB.db"
         ).build()
-        sessionManager = SessionManager()
+        sessionManager = SessionManager (this)
 
         // Get the UserDao from the database instance.
         val userDao = database.userDao()
-        val sessionManager = SessionManager() //this here to make option later for staying logged in
+        val sessionManager = SessionManager(this) //this here to make option later for staying logged in
         val viewModelFactory = LoginViewModel.LoginViewModelFactory(userDao)
         viewModel = ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
 

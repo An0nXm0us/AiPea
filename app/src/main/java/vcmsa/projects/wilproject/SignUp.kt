@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -42,7 +43,7 @@ class SignUp : AppCompatActivity() {
         // Initialize database and DAO
         database = EddieDatabase.getDatabase(applicationContext)
         userDao = database.userDao()
-        sessionManager = SessionManager()
+        sessionManager = SessionManager(this)
 
         // Initialize views
         etFullName = findViewById(R.id.etFullName)
