@@ -25,7 +25,7 @@
             android:name=".NotesFront"
             android:exported="false" />
         <activity
-            android:name=".notesCalender"
+            android:name=".CalenderFront"
             android:exported="false" />
         <activity
             android:name=".HomePage"

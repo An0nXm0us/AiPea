@@ -63,4 +63,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
     implementation(libs.kotlin.stdlib)
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0")
+    // Other dependencies
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx) // Kotlin Extensions
+
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 }

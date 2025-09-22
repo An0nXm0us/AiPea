@@ -25,7 +25,7 @@ class HomePage : AppCompatActivity() {
         sessionManager = SessionManager(this)
         notesBtn = findViewById(R.id.button12)
         notesBtn.setOnClickListener {
-            val intent = Intent(this, NotesFront::class.java)
+            val intent = Intent(this, CalenderFront::class.java )
             startActivity(intent)
         }
         logOut = findViewById(R.id.btn_log_out)

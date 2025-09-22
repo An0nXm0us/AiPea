@@ -82,7 +82,8 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
             }
         }
     }
-    companion object {
+   /*
+   *  companion object {
         fun provideFactory(dao: UserDao): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -90,4 +91,5 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
             }
         }
     }
+   * */
 }
