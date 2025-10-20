@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotesUpdate">
+
+    <!-- Green Header -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#08AE77"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Back Arrow Button -->
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:src="@drawable/baseline_arrow_back_white"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <!-- Header Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Update Notes"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Empty view to balance the layout -->
+        <View
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edit_shape"
+        android:hint="Title"
+        android:id="@+id/updateTitle"
+        android:paddingLeft="10dp"
+        android:elevation="2dp"
+        android:textColor="#08AE77"
+        android:textColorHint="#666666"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"/>
+
+    <EditText
+        android:id="@+id/updateDesc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edit_shape"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="top"
+        android:hint="Description"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:textColor="#08AE77"
+        android:textColorHint="#666666" />
+
+    <Button
+        android:id="@+id/updateBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/finalGreen"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:text="Update Note"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
