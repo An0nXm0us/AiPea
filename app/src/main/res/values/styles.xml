@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/green_primary</item>
+        <item name="colorPrimaryVariant">@color/green_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/green_dark</item>
+    </style>
+
+    <style name="QuizRadioButtonStyle">
+        <item name="android:buttonTint">#43A047</item>
+        <item name="android:textColor">#1B5E20</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>

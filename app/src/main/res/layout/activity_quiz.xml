@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/quizLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvTopicTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quiz"
+        android:textColor="#2E7D32"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp" />
+
+    <!-- Question Card -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#E8F5E9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading question..."
+                android:textSize="18sp"
+                android:textColor="#1B5E20"
+                android:lineSpacingExtra="4dp"
+                android:paddingBottom="10dp" />
+
+            <RadioGroup
+                android:id="@+id/rgOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/rbOption1"
+                    style="@style/QuizRadioButtonStyle"
+                    android:text="Option 1" />
+
+                <RadioButton
+                    android:id="@+id/rbOption2"
+                    style="@style/QuizRadioButtonStyle"
+                    android:text="Option 2" />
+
+                <RadioButton
+                    android:id="@+id/rbOption3"
+                    style="@style/QuizRadioButtonStyle"
+                    android:text="Option 3" />
+
+                <RadioButton
+                    android:id="@+id/rbOption4"
+                    style="@style/QuizRadioButtonStyle"
+                    android:text="Option 4" />
+            </RadioGroup>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/green_primary"
+        android:text="Next"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="16dp"
+         />
+
+</LinearLayout>
