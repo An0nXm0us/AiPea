@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/btnHome"
+        android:icon="@drawable/baseline_home_filled_grey"
+        android:title="Home" />
+    <item
+        android:id="@+id/btnCalendar"
+        android:icon="@drawable/calendar"
+        android:title="Calendar" />
+    <item
+        android:id="@+id/btnNotes"
+        android:icon="@drawable/baseline_note_alt_24"
+        android:title="Notes" />
+    <item
+        android:id="@+id/btnTextbook"
+        android:icon="@drawable/baseline_menu_book_24"
+        android:title="Textbook" />
+
+
+    <item
+        android:id="@+id/btnAI"
+        android:icon="@drawable/aichat"
+        android:title="AI" />
+</menu>

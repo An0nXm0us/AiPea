@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="btnDatePicker" type="id" />
+    <item name="eventsRecyclerView" type="id" />
+    <item name="formSection" type="id" />
+    <item name="btnSignUp" type="id" />
+    <item name="btnToLogin2" type="id" />
+    <item name="card_calendar" type="id" />
+    <item name="card_notes" type="id" />
+    <item name="card_subjects" type="id" />
+    <item name="card_ai" type="id" />
+</resources>

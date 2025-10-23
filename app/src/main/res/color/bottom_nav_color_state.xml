@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pressed state - Darker green -->
+    <item android:color="#FF388E3C" android:state_pressed="true" />
+
+    <!-- Selected/Checked state - Green -->
+    <item android:color="#FF4CAF50" android:state_checked="true" />
+
+    <!-- Unselected state - Medium gray -->
+    <item android:color="#FF9E9E9E" android:state_checked="false" />
+
+    <!-- Default state -->
+    <item android:color="#FF9E9E9E" />
+</selector>
