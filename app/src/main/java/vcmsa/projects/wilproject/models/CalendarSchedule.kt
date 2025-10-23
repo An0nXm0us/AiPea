@@ -11,18 +11,18 @@ foreignKeys = [
     ForeignKey(
         entity = User::class,
         parentColumns = arrayOf("userId"),
-        childColumns = arrayOf("userId"),
+        childColumns = arrayOf("event_userId"),
         onUpdate = ForeignKey.Companion.CASCADE,
         onDelete = ForeignKey.Companion.CASCADE
     )
 ]
 )
-data class CalendarSchedule(
-    val eventName: String,
-    val eventType: String,
-    val eventDescription: String,
-    val eventDate: Date,
+data class CalendarSchedule @JvmOverloads constructor(
+    val eventName: String ="",
+    val eventType: String ="",
+    val eventDescription: String ="",
+    val eventDate: Date = Date(),
     @PrimaryKey(autoGenerate = true)
-    val eventId: Int = 0,
-    val userId : String,
+    val eventId: Int? = null,
+    val event_userId : String ="",
 )

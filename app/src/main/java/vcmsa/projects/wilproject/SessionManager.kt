@@ -29,6 +29,12 @@ open class SessionManager(context: Context) {
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false) && getUserId() != null
     }
+    fun getUserInfo(): Triple<String?, String?, String?> {
+        val userId = sharedPreferences.getString(KEY_USER_ID, null)
+        val email = sharedPreferences.getString(KEY_USER_EMAIL, null)
+        val name = sharedPreferences.getString(KEY_USER_NAME, null)
+        return Triple(userId, email, name)
+    }
 
     fun clearSession() {
         val editor = sharedPreferences.edit()

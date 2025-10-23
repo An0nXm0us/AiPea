@@ -25,7 +25,7 @@ class FakeCalendarDao : CalendarDao {
         eventsFlow
 
     override fun getEventByGroup(userId: String, eventGroup: String): Flow<List<CalendarSchedule>> =
-        eventsFlow.map { list -> list.filter { it.userId == userId && it.eventType == eventGroup } }
+        eventsFlow.map { list -> list.filter { it.event_userId == userId && it.eventType == eventGroup } }
 
     override fun getEventsByDateRange(
         userId: String,
@@ -34,7 +34,7 @@ class FakeCalendarDao : CalendarDao {
     ): Flow<List<CalendarSchedule>> =
         eventsFlow.map { list ->
             list.filter {
-                it.userId == userId &&
+                it.event_userId == userId &&
                         it.eventDate.after(startDate) &&
                         it.eventDate.before(endDate)
             }

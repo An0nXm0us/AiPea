@@ -9,20 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import vcmsa.projects.wilproject.db.EddieDatabase
 import vcmsa.projects.wilproject.event.NotesEvent
 import vcmsa.projects.wilproject.viewModel.NoteViewModel
+import vcmsa.projects.wilproject.firebase.NotesRepo
+import vcmsa.projects.wilproject.firebase.FirebaseDB
 
 class NotesAdd : AppCompatActivity() {
 
     private lateinit var viewModel: NoteViewModel
     private lateinit var sessionManager: SessionManager
-    private lateinit var database: EddieDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,23 +32,22 @@ class NotesAdd : AppCompatActivity() {
             insets
         }
 
-        // Initialize database
-        database = Room.databaseBuilder(
-            applicationContext,
-            EddieDatabase::class.java,
-            "eddieDB.db"
-        ).build()
+        val database = EddieDatabase.getDatabase(applicationContext)
+        val notesDao = database.notesDao()
+        val firebaseConnect = FirebaseDB()
 
-        // Initialize session manager
         sessionManager = SessionManager(this)
 
-        // Initialize ViewModel
+
+        val notesRepository = NotesRepo(notesDao, firebaseConnect)
+
         viewModel = ViewModelProvider(
             this,
-            NoteViewModel.provideFactory(database.notesDao(), sessionManager)
+            NoteViewModel.provideFactory(notesRepository, sessionManager)
         )[NoteViewModel::class.java]
 
         setupClickListeners()
+        observeViewModel()
     }
 
     private fun setupClickListeners() {
@@ -58,11 +55,7 @@ class NotesAdd : AppCompatActivity() {
 
         addButton.setOnClickListener {
             addNote()
-            intent = Intent(this, NotesFront::class.java)
-            startActivity(intent)
         }
-
-
     }
 
     private fun addNote() {
@@ -77,25 +70,27 @@ class NotesAdd : AppCompatActivity() {
             return
         }
 
-        // Use ViewModel to handle the note creation
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
 
-                viewModel.onEvent(NotesEvent.setTitle(title))
-                viewModel.onEvent(NotesEvent.setDecription(description))
+        viewModel.onEvent(NotesEvent.setTitle(title))
+        viewModel.onEvent(NotesEvent.setDecription(description))
+        viewModel.onEvent(NotesEvent.createNote)
+    }
 
-                viewModel.onEvent(NotesEvent.createNote)
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            viewModel.noteState.collect { state ->
 
-                // Check if notes are successful and finish
-                if (viewModel.noteState.value.isSuccess) {
+                if (state.isSuccess) {
+                    Toast.makeText(this@NotesAdd, "Note saved!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@NotesAdd, NotesFront::class.java)
+                    startActivity(intent)
                     finish()
-                } else {
-                    // need to show error message
                 }
-            } catch (e: Exception) {
-                // error message atch
-            }
 
+                state.errorMessage?.let { error ->
+                    Toast.makeText(this@NotesAdd, error, Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 }

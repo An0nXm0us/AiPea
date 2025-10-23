@@ -11,16 +11,17 @@ import java.util.UUID
         ForeignKey(
             entity = User::class,
             parentColumns = arrayOf("userId"),
-            childColumns = arrayOf("userId"),
+            childColumns = arrayOf("note_userId"),
             onUpdate = ForeignKey.Companion.CASCADE,
             onDelete = ForeignKey.Companion.CASCADE
         )
     ]
 )
-data class Notes(
-    val userId : String,
+data class Notes @JvmOverloads constructor(
+    val note_userId : String ="",
     @PrimaryKey
     val noteId :String = UUID.randomUUID().toString(),
-    val title: String,
-    val description:String
+    val title: String = "",
+    val description:String =""
+
 )

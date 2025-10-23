@@ -14,10 +14,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import vcmsa.projects.wilproject.db.EddieDatabase
-import vcmsa.projects.wilproject.viewModel.UserViewModel // Import the ViewModel
+import vcmsa.projects.wilproject.viewModel.UserViewModel
+import vcmsa.projects.wilproject.firebase.UserRepo
+import vcmsa.projects.wilproject.firebase.FirebaseDB
+
 class ForgotPassword : AppCompatActivity() {
     private lateinit var etNewPassword: EditText
     private lateinit var etConfirmPassword: EditText
@@ -25,11 +27,9 @@ class ForgotPassword : AppCompatActivity() {
     private lateinit var btnBack: ImageButton
     private lateinit var progressBar: ProgressBar
     private lateinit var tvSuccessMessage: TextView
-    private lateinit var tvErrorMessage: TextView // New TextView for specific errors
+    private lateinit var tvErrorMessage: TextView
 
-    // Use the ViewModel instead of direct DAO access
     private lateinit var viewModel: UserViewModel
-
     private lateinit var userEmail: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +37,16 @@ class ForgotPassword : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_forgot_password)
 
-
-        // Initialize database and ViewModel
         val database = EddieDatabase.getDatabase(applicationContext)
+        val userDao = database.userDao()
+        val firebaseConnect = FirebaseDB()
+
+        val userRepo = UserRepo(userDao, firebaseConnect)
+
+
         viewModel = ViewModelProvider(
             this,
-            UserViewModel.provideFactory(database.userDao()) // Use the factory from UserViewModel
+            UserViewModel.provideFactory(userRepo)
         )[UserViewModel::class.java]
 
         initializeViews()
@@ -64,8 +68,7 @@ class ForgotPassword : AppCompatActivity() {
         btnBack = findViewById(R.id.btnBack)
         progressBar = findViewById(R.id.progressBar)
         tvSuccessMessage = findViewById(R.id.tvSuccessMessage)
-        // Assuming you add an ID for an error message TextView in your layout
-        // tvErrorMessage = findViewById(R.id.tvErrorMessage)
+
     }
 
     private fun setupClickListeners() {
@@ -79,7 +82,6 @@ class ForgotPassword : AppCompatActivity() {
     }
 
     private fun setupPasswordValidation() {
-        // ... (validation logic remains the same)
         val passwordTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -93,12 +95,11 @@ class ForgotPassword : AppCompatActivity() {
     }
 
     private fun validatePasswords() {
-        // ... (validation logic remains the same)
         val newPassword = etNewPassword.text.toString()
         val confirmPassword = etConfirmPassword.text.toString()
 
         val doPasswordsMatch =
-            newPassword == confirmPassword && newPassword.length >= 6 // Recommend min length check
+            newPassword == confirmPassword && newPassword.length >= 6
 
         btnResetPassword.isEnabled = doPasswordsMatch
         btnResetPassword.alpha = if (btnResetPassword.isEnabled) 1.0f else 0.5f
@@ -114,12 +115,12 @@ class ForgotPassword : AppCompatActivity() {
         val newPassword = etNewPassword.text.toString()
         val confirmPassword = etConfirmPassword.text.toString()
         val email = userEmail.text.toString()
-        // Final validation
+
         if (email.isBlank()) {
             showError("Cannot reset password: User email is missing.")
             return
         }
-        if (newPassword.length < 6) { // Basic length check
+        if (newPassword.length < 6) {
             showError("Password must be at least 6 characters.")
             return
         }
@@ -128,36 +129,32 @@ class ForgotPassword : AppCompatActivity() {
             return
         }
 
-        // Show loading state
         setLoadingState(true)
 
         lifecycleScope.launch {
-            // 1. Call the new function in the ViewModel
-            val success = viewModel.resetPassword(userEmail.text.toString(), newPassword)
 
-            // Hide loading state
+            val success = viewModel.resetPassword(email, newPassword)
+
             setLoadingState(false)
 
             if (success) {
                 showSuccessMessage()
-                // Navigate to login after delay
                 Handler(Looper.getMainLooper()).postDelayed({
                     navigateToLogin()
                 }, 3000)
             } else {
-                // 2. Updated error handling for specific failure
-                showError("Failed to reset password. User may not exist or database error.")
+
+                showError("Failed to reset password. Check if the email address is registered.")
             }
         }
     }
-
-    // REMOVE the manual updatePasswordInDatabase function
 
     private fun setLoadingState(isLoading: Boolean) {
         btnResetPassword.isEnabled = !isLoading
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         btnResetPassword.text = if (isLoading) "Resetting..." else "Reset Password"
 
+        userEmail.isEnabled = !isLoading
         etNewPassword.isEnabled = !isLoading
         etConfirmPassword.isEnabled = !isLoading
     }

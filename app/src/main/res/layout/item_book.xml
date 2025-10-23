@@ -46,12 +46,11 @@
             android:gravity="center_vertical"
             android:layout_marginTop="8dp">
 
-            <!-- Download Button (Visible when NOT_STARTED) -->
             <Button
                 android:id="@+id/button_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fetch Book"
+                android:text="View Book"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:backgroundTint="#4CAF50"

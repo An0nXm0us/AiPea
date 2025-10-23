@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "774449381544",
     "project_id": "aipea-1c3e4",
-    "storage_bucket": "aipea-1c3e4.firebasestorage.app"
+    "storage_bucket": "aipea-1c3e4.firebasestorage.app",
+    "firebase_url": "https://aipea-1c3e4-default-rtdb.firebaseio.com"
   },
   "client": [
     {

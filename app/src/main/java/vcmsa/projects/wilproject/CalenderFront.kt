@@ -9,25 +9,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import vcmsa.projects.wilproject.db.EddieDatabase
 import vcmsa.projects.wilproject.models.CalendarSchedule
 import vcmsa.projects.wilproject.event.CalendarEvent
 import vcmsa.projects.wilproject.viewModel.CalendarViewModel
+import vcmsa.projects.wilproject.firebase.CalendarRepos
+import vcmsa.projects.wilproject.firebase.FirebaseDB
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.getValue
 
 class CalenderFront : AppCompatActivity() {
 
-    private lateinit var calendarView: CalendarView
     private lateinit var filterSpinner: Spinner
     private lateinit var addEventButton: Button
     private lateinit var selectedDateText: TextView
@@ -35,16 +34,18 @@ class CalenderFront : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
 
     private lateinit var sessionManager: SessionManager
-    val database by lazy { EddieDatabase.getDatabase(applicationContext) }
 
+    private val viewModel: CalendarViewModel by lazy {
 
-    private val viewModel: CalendarViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val dao = database.calenderDao()
-                return CalendarViewModel(dao, sessionManager) as T
-            }
-        }
+        val database = EddieDatabase.getDatabase(applicationContext) // Database created locally
+        val calendarDao = database.calenderDao()
+        val firebaseConnect = FirebaseDB() // Placeholder for Firebase connection
+
+        val calendarRepository = CalendarRepos(calendarDao, firebaseConnect)
+
+        val factory = CalendarViewModel.provideFactory(calendarRepository, sessionManager)
+
+        ViewModelProvider(this, factory)[CalendarViewModel::class.java]
     }
 
     private lateinit var eventsAdapter: EventsAdapter
@@ -54,7 +55,6 @@ class CalenderFront : AppCompatActivity() {
 
         sessionManager = SessionManager(applicationContext)
 
-        // Initialize views using findViewById
         filterSpinner = findViewById(R.id.filterSpinner)
         addEventButton = findViewById(R.id.addEventButton)
         selectedDateText = findViewById(R.id.calendarPageTitle)
@@ -76,8 +76,8 @@ class CalenderFront : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        // Set the current item as selected
-        bottomNavigation.selectedItemId = R.id.btnCalendar // Changed to btnCalendar since this is the calendar page
+
+        bottomNavigation.selectedItemId = R.id.btnCalendar
 
         bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

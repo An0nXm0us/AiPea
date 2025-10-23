@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
@@ -49,6 +50,18 @@ class EpubViewerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         webViewReader.settings.javaScriptEnabled = true
+        webViewReader.settings.allowFileAccess = true
+        webViewReader.settings.allowFileAccessFromFileURLs = true
+        webViewReader.settings.allowUniversalAccessFromFileURLs = true
+
+
+        webViewReader.isLongClickable = true
+        webViewReader.setOnLongClickListener {
+            selectedText = "trigger"
+            invalidateOptionsMenu()
+            false
+        }
+
         webViewReader.addJavascriptInterface(WebViewInterface(), "Android")
 
         webViewReader.webViewClient = object : WebViewClient() {
@@ -57,6 +70,17 @@ class EpubViewerActivity : AppCompatActivity() {
                 injectHighlightingScript(view)
                 progressBar.visibility = View.GONE
                 webViewReader.visibility = View.VISIBLE
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                val url = request?.url.toString()
+                Log.d(TAG, "Attempting to load URL: $url")
+
+                if (url.startsWith("http")) {
+                    return true
+                }
+
+                return false
             }
         }
 
@@ -81,9 +105,9 @@ class EpubViewerActivity : AppCompatActivity() {
                 if (dir.exists()) {
                     val success = dir.deleteRecursively()
                     if (success) {
-                        Log.d(TAG, "Successfully extracted EPUB files.")
+                        Log.d(TAG, "Successfully deleted extracted EPUB files at: ${dir.absolutePath}")
                     } else {
-                        Log.e(TAG, "Failed to delete extracted EPUB files.")
+                        Log.e(TAG, "Failed to delete extracted EPUB files at: ${dir.absolutePath}")
                     }
                 }
             }
@@ -93,41 +117,58 @@ class EpubViewerActivity : AppCompatActivity() {
     private fun injectHighlightingScript(webView: WebView?) {
         val script = """
             (function() {
-                function getSelectionText() {
-                    var text = "";
+                // Function to get the currently selected text, called only when the button is pressed
+                window.getSelectionText = function() {
                     if (window.getSelection) {
-                        text = window.getSelection().toString();
-                    } else if (document.selection && document.selection.type != "Control") {
-                        text = document.selection.createRange().text;
+                        return window.getSelection().toString().trim();
                     }
-                    return text.trim();
-                }
+                    return ""; 
+                };
 
-                document.addEventListener('mouseup', function() {
-                    var selectedText = getSelectionText();
-                    if (selectedText.length > 0) {
-                        Android.onTextSelected(selectedText);
-                    } else {
-                        Android.onSelectionCleared();
-                    }
-                }, false);
-                
-                window.highlightSelection = function() {
+                // Function to get coordinates for robust, coordinate-based highlighting
+                window.getHighlightRects = function() {
                     var selection = window.getSelection();
-                    if (selection && selection.rangeCount > 0) {
-                        var range = selection.getRangeAt(0);
-                        var span = document.createElement('span');
-                        span.style.backgroundColor = 'yellow';
-                        span.style.borderRadius = '3px';
-                        span.className = 'app-highlight';
-                        
-                        try {
-                            range.surroundContents(span);
-                        } catch (e) {
-                            console.error("Highlight failed: ", e);
-                        }
-                        selection.removeAllRanges();
+                    if (!selection.rangeCount) return "[]";
+
+                    var range = selection.getRangeAt(0);
+                    var rects = range.getClientRects();
+                    var rectArray = [];
+
+                    for (var i = 0; i < rects.length; i++) {
+                        var rect = rects[i];
+                        // Add scroll offset to get absolute page coordinates
+                        rectArray.push({
+                            left: rect.left + window.pageXOffset,
+                            top: rect.top + window.pageYOffset,
+                            width: rect.width,
+                            height: rect.height
+                        });
                     }
+                    
+                    return JSON.stringify(rectArray);
+                };
+
+                // Function to manually draw the highlight spans using coordinates
+                window.drawHighlightSpans = function(rectsJson) {
+                    var rects = JSON.parse(rectsJson);
+                    var container = document.body;
+
+                    rects.forEach(function(rect) {
+                        var span = document.createElement('span');
+                        span.className = 'manual-highlight'; 
+                        
+                        span.style.position = 'absolute';
+                        span.style.backgroundColor = 'rgba(255, 255, 0, 0.5)'; 
+                        span.style.zIndex = '9999'; 
+                        span.style.pointerEvents = 'none'; 
+
+                        span.style.left = rect.left + 'px';
+                        span.style.top = rect.top + 'px';
+                        span.style.width = rect.width + 'px';
+                        span.style.height = rect.height + 'px';
+
+                        container.appendChild(span);
+                    });
                 };
             })();
         """.trimIndent()
@@ -135,18 +176,10 @@ class EpubViewerActivity : AppCompatActivity() {
         webView?.evaluateJavascript(script, null)
     }
 
+
     private inner class WebViewInterface {
         @JavascriptInterface
         fun onTextSelected(text: String) {
-            selectedText = text
-            runOnUiThread { invalidateOptionsMenu() }
-            Log.d(TAG, "Text selected: $text")
-        }
-
-        @JavascriptInterface
-        fun onSelectionCleared() {
-            selectedText = null
-            runOnUiThread { invalidateOptionsMenu() }
         }
     }
 
@@ -177,12 +210,28 @@ class EpubViewerActivity : AppCompatActivity() {
     }
 
     private fun applyHighlight() {
-        if (!selectedText.isNullOrBlank()) {
-            webViewReader.evaluateJavascript("window.highlightSelection();", null)
-            Toast.makeText(this, "Highlighted: ${selectedText!!.take(30)}...", Toast.LENGTH_SHORT).show()
-            selectedText = null
-            invalidateOptionsMenu()
+        webViewReader.evaluateJavascript("window.getSelectionText();") { textString ->
+            val currentText = textString.trim().replace("\"", "")
 
+            if (currentText.isNotEmpty()) {
+                webViewReader.evaluateJavascript("window.getHighlightRects();") { rectsJson ->
+                    if (rectsJson.isNullOrBlank() || rectsJson == "[]" || rectsJson == "null") {
+                        Toast.makeText(this, "Highlight failed. Selection lost or invalid.", Toast.LENGTH_SHORT).show()
+                        return@evaluateJavascript
+                    }
+
+                    webViewReader.evaluateJavascript("window.getSelection().removeAllRanges();", null)
+
+                    webViewReader.evaluateJavascript("window.drawHighlightSpans('$rectsJson');", null)
+                    Toast.makeText(this, "Highlighted: ${currentText.take(30)}...", Toast.LENGTH_SHORT).show()
+                    selectedText = null
+                    invalidateOptionsMenu()
+                }
+            } else {
+                Toast.makeText(this, "No text selected to highlight.", Toast.LENGTH_SHORT).show()
+                selectedText = null
+                invalidateOptionsMenu()
+            }
         }
     }
 
@@ -226,6 +275,7 @@ class EpubViewerActivity : AppCompatActivity() {
             }
         }
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         finish()

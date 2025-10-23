@@ -10,19 +10,19 @@ import vcmsa.projects.wilproject.models.User
 
 @Dao
 interface NotesDao {
-
+//vararg= 0 or more arguments
     @Upsert
-    suspend fun insertNote(notes: Notes)
+    suspend fun insertNote(vararg notes: Notes)
 
     @Delete
     suspend fun deleteNote(note: Notes)
 
     // Fetch user ID based on note ID
-    @Query("SELECT userId FROM notes WHERE noteId = :noteId")
+    @Query("SELECT note_userId FROM notes WHERE noteId = :noteId")
     suspend fun getUserIdByNoteId(noteId: String): String?
 
     // Get notes of a user
-    @Query("SELECT * FROM notes WHERE userId = :userId")
+    @Query("SELECT * FROM notes WHERE note_userId = :userId")
     fun getNotesByUserId(userId: String): Flow<List<Notes>>
 
     // To get user details along with their notes

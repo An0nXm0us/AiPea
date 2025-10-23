@@ -7,18 +7,19 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import androidx.room.Room
 import vcmsa.projects.wilproject.dao.UserDao
 import vcmsa.projects.wilproject.db.EddieDatabase
-import vcmsa.projects.wilproject.state.UserEvent
+import vcmsa.projects.wilproject.event.UserEvent
 import vcmsa.projects.wilproject.viewModel.UserViewModel
+import vcmsa.projects.wilproject.firebase.UserRepo // Import the repository
+import vcmsa.projects.wilproject.firebase.FirebaseDB // Import Firebase dependency
 
 class SignUp : AppCompatActivity() {
     private lateinit var etFullName: EditText
@@ -28,16 +29,14 @@ class SignUp : AppCompatActivity() {
     private lateinit var signupButton: Button
     private lateinit var loginRedirectText: TextView
     private lateinit var sessionManager: SessionManager
-    private lateinit var database: EddieDatabase
-    private lateinit var userDao: UserDao
-
-    // initialize for ViewModel
     private val viewModel: UserViewModel by lazy {
-        val factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return UserViewModel(userDao) as T
-            }
-        }
+
+        val database = EddieDatabase.getDatabase(applicationContext)
+        val userDao = database.userDao()
+        val firebaseConnect = FirebaseDB()
+        val userRepo = UserRepo(userDao, firebaseConnect)
+        val factory = UserViewModel.provideFactory(userRepo)
+
         ViewModelProvider(this, factory)[UserViewModel::class.java]
     }
 
@@ -46,12 +45,8 @@ class SignUp : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_sign_up)
 
-        // Initialize database and DAO
-        database = EddieDatabase.getDatabase(applicationContext)
-        userDao = database.userDao()
         sessionManager = SessionManager(this)
 
-        // Initialize views
         etFullName = findViewById(R.id.etFullName)
         etEmail = findViewById(R.id.etEmail)
         etPassword = findViewById(R.id.etPassword)
@@ -59,14 +54,12 @@ class SignUp : AppCompatActivity() {
         signupButton = findViewById(R.id.signup_button)
         loginRedirectText = findViewById(R.id.loginRedirectText)
 
-        // Redirect to home page if the user is already logged in
         if (sessionManager.isLoggedIn()) {
             startActivity(Intent(this, HomePage::class.java))
             finish()
             return
         }
 
-        // FIX: Use the root view of the layout instead of R.id.main
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -74,7 +67,7 @@ class SignUp : AppCompatActivity() {
         }
 
         setupEventListeners()
-        observeViewModel()  // observe state of the view model
+        observeViewModel()
     }
 
     private fun setupEventListeners() {
@@ -91,7 +84,6 @@ class SignUp : AppCompatActivity() {
         }
 
         etConfirmPassword.onTextChanged { text ->
-            // nothing happens here cos we are not saving this to db
         }
 
         signupButton.setOnClickListener {
@@ -107,7 +99,6 @@ class SignUp : AppCompatActivity() {
             viewModel.onEvent(UserEvent.createUser)
         }
 
-        // Add click listener for login redirect
         loginRedirectText.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
@@ -116,7 +107,6 @@ class SignUp : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        // Observe the ViewModel state for success/error
         lifecycleScope.launch {
             viewModel.userState.collect { state ->
                 // Handle errors
@@ -138,7 +128,7 @@ class SignUp : AppCompatActivity() {
                     etPassword.text.clear()
                     etConfirmPassword.text.clear()
 
-                    // Redirect to Login page instead of SignUp
+                    // Redirect to Login
                     val intent = Intent(this@SignUp, Login::class.java)
                     startActivity(intent)
                     finish()
@@ -151,7 +141,7 @@ class SignUp : AppCompatActivity() {
 fun android.widget.EditText.onTextChanged(listener: (String) -> Unit) {
     this.addTextChangedListener(object : android.text.TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: android.text.Editable?) {
             listener(s.toString())
         }

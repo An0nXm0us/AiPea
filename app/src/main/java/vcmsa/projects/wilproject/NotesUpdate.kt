@@ -2,19 +2,24 @@ package vcmsa.projects.wilproject
 
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.first
 import vcmsa.projects.wilproject.db.EddieDatabase
 import vcmsa.projects.wilproject.models.Notes
+import vcmsa.projects.wilproject.event.NotesEvent
+import vcmsa.projects.wilproject.viewModel.NoteViewModel
+import vcmsa.projects.wilproject.firebase.NotesRepo
+import vcmsa.projects.wilproject.firebase.FirebaseDB
 
 class NotesUpdate : AppCompatActivity() {
-
-    private lateinit var database: EddieDatabase
+    private lateinit var viewModel: NoteViewModel
+    private lateinit var sessionManager: SessionManager
     private var currentNote: Notes? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +33,26 @@ class NotesUpdate : AppCompatActivity() {
             insets
         }
 
-        database = EddieDatabase.getDatabase(applicationContext)
+        // Initialize dependencies
+        val database = EddieDatabase.getDatabase(applicationContext)
+        val notesDao = database.notesDao()
+        val firebaseConnect = FirebaseDB()
+        sessionManager = SessionManager(this)
 
-        // Get note ID from intent
+
+        val notesRepository = NotesRepo(notesDao, firebaseConnect)
+        viewModel = ViewModelProvider(
+            this,
+            NoteViewModel.provideFactory(notesRepository, sessionManager)
+        )[NoteViewModel::class.java]
+
+
         val noteId = intent.getStringExtra("NOTE_ID") ?: ""
 
         if (noteId.isNotBlank()) {
             loadNote(noteId)
         } else {
-            finish() // No note ID is provided
+            finish()
         }
 
         setupClickListeners()
@@ -45,15 +61,14 @@ class NotesUpdate : AppCompatActivity() {
     private fun loadNote(noteId: String) {
         lifecycleScope.launch {
             try {
-                // Get the note from database
-                val notesFlow = database.notesDao().getNoteById(noteId)
-                val notesList = notesFlow.first()
 
-                if (notesList.isNotEmpty()) {
-                    currentNote = notesList[0]
-                    populateNoteData(currentNote!!)
-                } else {
-                    finish() // Note not found
+                viewModel.noteState.collect { state ->
+                    val note = state.notes.find { it.noteId == noteId }
+                    if (note != null && currentNote == null) {
+                        currentNote = note
+                        populateNoteData(note)
+                    } else if (currentNote == null) {
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -71,10 +86,9 @@ class NotesUpdate : AppCompatActivity() {
         findViewById<android.widget.Button>(R.id.updateBtn).setOnClickListener {
             updateNote()
         }
-        // In your NotesUpdate activity's onCreate method
         val backButton = findViewById<ImageView>(R.id.backButton)
         backButton.setOnClickListener {
-            onBackPressed() // or finish() to close the activity
+            onBackPressed()
         }
     }
 
@@ -83,27 +97,23 @@ class NotesUpdate : AppCompatActivity() {
         val description = findViewById<android.widget.EditText>(R.id.updateDesc).text.toString()
 
         if (title.isBlank() || description.isBlank()) {
-            // Show error message
+            Toast.makeText(this,"Title or description must not be empty", Toast.LENGTH_LONG).show()
             return
         }
 
-        currentNote?.let { note ->
-            // Create updated note
-            val updatedNote = note.copy(
+        currentNote?.let { oldNote ->
+            val updatedNote = oldNote.copy(
                 title = title,
                 description = description
             )
 
-            lifecycleScope.launch {
-                try {
-                    // Delete old note and insert updated one
-                    database.notesDao().deleteNote(note)
-                    database.notesDao().insertNote(updatedNote)
 
-                    finish()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            lifecycleScope.launch {
+                viewModel.onEvent(NotesEvent.deleteNotes(oldNote))
+                viewModel.onEvent(NotesEvent.setTitle(updatedNote.title))
+                viewModel.onEvent(NotesEvent.setDecription(updatedNote.description))
+                viewModel.onEvent(NotesEvent.createNote)
+                finish()
             }
         }
     }

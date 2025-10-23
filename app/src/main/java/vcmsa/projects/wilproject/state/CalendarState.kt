@@ -13,8 +13,8 @@ data class CalendarState(
     val userId : String = "",
     val isAddingEvent: Boolean = false,
     val sortType: SortType = SortType.EVENT_NAME,
-    val selectedDate: Date = Date(),  // Added for date selection
-    val filterType: String? = null, // Added for filtering
+    val selectedDate: Date = Date(),
+    val filterType: String? = null,
     val errorMessage: String? = null,
     val isSuccess: Boolean = false
 )

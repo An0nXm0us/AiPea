@@ -9,29 +9,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import vcmsa.projects.wilproject.SessionManager
 import vcmsa.projects.wilproject.state.LoginState
-
-import vcmsa.projects.wilproject.dao.UserDao
+import vcmsa.projects.wilproject.firebase.LoginRepo
 import vcmsa.projects.wilproject.event.LoginEvent
 import vcmsa.projects.wilproject.models.User
-import java.security.MessageDigest
-
-class LoginViewModel(private val dao: UserDao) : ViewModel() {
+class LoginViewModel(private val repository: LoginRepo, private val sessionManager: SessionManager ) : ViewModel() {
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState.asStateFlow()
+
     private var _loggedInUser: User? = null
 
-    fun hasPass(hashPassword : String): String
-    {
-        val bytes = hashPassword.toByteArray(Charsets.UTF_8)
-        val md = MessageDigest.getInstance("SHA-512")
-        val digest = md.digest(bytes)
-        return digest.fold("") { str, byte -> str + "%02x".format(byte) }
-    }
-    fun verifyPassword(providedPassword: String, storedHash: String): Boolean {
-        val providedPasswordHash = hasPass(providedPassword)
-        return providedPasswordHash == storedHash
-    }
+
     fun onEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.checkUsername -> {
@@ -42,6 +31,9 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
             }
             LoginEvent.Login -> {
                 attemptLogin()
+            }
+            is LoginEvent.GoogleSignInSuccess -> {
+                handleGoogleSignIn(event.googleUserId, event.email, event.displayName)
             }
         }
     }
@@ -66,16 +58,10 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
             _loginState.update { it.copy(isLoading = true, errorMessage = null) }
 
             try {
-                var user = dao.getUserByUsername(state.username)
-
-
-                if (user == null && Patterns.EMAIL_ADDRESS.matcher(state.username).matches()) {
-                    user = dao.getUserByEmail(state.username)
-                    Log.d("LoginViewModel", "Initial username lookup failed. Attempting lookup by email.")
-                }
+                val user = repository.attemptLocalLogin(state.username, state.password)
 
                 if (user == null) {
-                    Log.d("LoginViewModel", "User lookup failed. User not found.")
+                    Log.d("LoginViewModel", "User lookup failed or credentials invalid.")
                     _loginState.update {
                         it.copy(
                             isLoading = false,
@@ -84,21 +70,8 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
                     }
                     return@launch
                 }
-
-                Log.d("LoginViewModel", "User lookup successful. User found: ${user.email}")
-
-                 if (!verifyPassword(state.password, user.password)) {
-                    Log.d("LoginViewModel", "Password mismatch.")
-                    _loginState.update {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = "Invalid username or password"
-                        )
-                    }
-                    return@launch
-                }
-
-                Log.d("LoginViewModel", "Password match successful. Login complete.")
+                sessionManager.saveUserSession(userId = user.userId, email = user.email, name = user.firstName)
+                Log.d("LoginViewModel", "Login successful.")
                 _loggedInUser = user
                 _loginState.update {
                     it.copy(
@@ -117,14 +90,48 @@ class LoginViewModel(private val dao: UserDao) : ViewModel() {
                     )
                 }
             }
+
         }
     }
 
-    class LoginViewModelFactory(private val userDao: UserDao) : ViewModelProvider.Factory {
+
+    private fun handleGoogleSignIn(googleUserId: String, email: String, displayName: String) {
+        Log.d("LoginViewModel", "Attempting Google Sign-In for user: $email")
+
+        viewModelScope.launch {
+            _loginState.update { it.copy(isLoading = true, errorMessage = null) }
+            try {
+                val user = repository.handleGoogleSignIn(googleUserId, email, displayName)
+                sessionManager.saveUserSession(userId = user.userId, email = user.email, name = user.firstName)
+
+                Log.d("LoginViewModel", "Google Sign-In successful. Login complete.")
+                _loggedInUser = user
+                _loginState.update {
+                    it.copy(
+                        isLoading = false,
+                        isSuccess = true,
+                        errorMessage = null
+                    )
+                }
+
+            } catch (e: Exception) {
+                Log.e("LoginViewModel", "Google Sign-In failed with exception: ${e.message}")
+                _loginState.update {
+                    it.copy(
+                        isLoading = false,
+                        errorMessage = "Google Sign-In failed: ${e.message}"
+                    )
+                }
+            }
+        }
+    }
+
+
+    class LoginViewModelFactory(private val repository: LoginRepo, private val sessionManager: SessionManager) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return LoginViewModel(userDao) as T
+                return LoginViewModel(repository,sessionManager) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

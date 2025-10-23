@@ -19,10 +19,10 @@ interface CalendarDao {
     @Query("SELECT * FROM events ORDER BY eventName ASC")
     fun getEventOrderedByName() : Flow<List<CalendarSchedule>>
 
-    @Query("SELECT * FROM events WHERE userId = :userId AND eventType = :eventGroup")
+    @Query("SELECT * FROM events WHERE event_userId = :userId AND eventType = :eventGroup")
     fun getEventByGroup(userId: String, eventGroup: String): Flow<List<CalendarSchedule>>
 
-    @Query("SELECT * FROM events WHERE userId = :userId AND eventDate BETWEEN :startDate AND :endDate ORDER BY eventDate ASC")
+    @Query("SELECT * FROM events WHERE event_userId = :userId AND eventDate BETWEEN :startDate AND :endDate ORDER BY eventDate ASC")
     fun getEventsByDateRange(userId: String, startDate: Date, endDate: Date): Flow<List<CalendarSchedule>>
 
 

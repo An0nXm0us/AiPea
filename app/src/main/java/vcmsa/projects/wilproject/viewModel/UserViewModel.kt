@@ -8,21 +8,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import vcmsa.projects.wilproject.dao.UserDao
+import vcmsa.projects.wilproject.firebase.UserRepo
 import vcmsa.projects.wilproject.models.User
-import vcmsa.projects.wilproject.state.UserEvent
+import vcmsa.projects.wilproject.event.UserEvent
 import vcmsa.projects.wilproject.state.UserState
 import java.security.MessageDigest
 
-class UserViewModel(private val dao: UserDao) : ViewModel() {
+class UserViewModel(private val repository: UserRepo) : ViewModel() {
     private val _userState = MutableStateFlow(UserState())
     val userState = _userState.asStateFlow()
     companion object {
-        fun provideFactory(dao: UserDao): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+        fun provideFactory(repository: UserRepo): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                // Ensure the ViewModel class is correct here
-                return UserViewModel(dao) as T
+                return UserViewModel(repository) as T
             }
         }
     }
@@ -33,63 +32,42 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
         val digest = md.digest(bytes)
         return digest.fold("") { str, byte -> str + "%02x".format(byte) }
     }
-    suspend fun resetPassword(email: String, newPasswordPlain: String): Boolean {
-        // 1. Hash the new password using the existing utility function
-        val hashedPassword = hasPass(newPasswordPlain)
-        Log.d("ResetDebug", "Attempting reset for email: $email")
-        return try {
-            val user = dao.getUserByEmail(email) // Get the user object
 
-            user?.let {
-                // Create a copy of the user with the new hashed password
-                Log.d("ResetDebug", "User found. Updating password.")
-                val updatedUser = it.copy(password = hashedPassword)
-                dao.updateUser(updatedUser) // Update the user in the database
-                true // Success
-            } ?: false // User not found
-        } catch (e: Exception) {
-            Log.e("ResetDebug", "Database UPDATE FAILED: ${e.message}", e)
-            e.printStackTrace()
-            false // Failure due to exception
-        }
+
+    suspend fun resetPassword(email: String, newPasswordPlain: String): Boolean {
+        Log.d("ResetDebug", "Attempting reset for email: $email")
+        return repository.resetUserPassword(email, hasPass(newPasswordPlain))
     }
+
+
+
     fun onEvent(event: UserEvent)
     {
         when(event){
-            is UserEvent.deleteUser -> {
-                viewModelScope.launch {
-                    dao.deleteUser(event.user)
-                }
-            }
             UserEvent.createUser -> {
                 val fullName = userState.value.firstName
-                val password = userState.value.password
+                val rawPassword = userState.value.password
                 val email = userState.value.email
-                val checkedEmail = _userState.equals(UserState::isValid)
-                val hashedPassword = hasPass(password)
-                if(fullName.isBlank() || password.isBlank() || email.isBlank())
+                val checkedEmail = _userState.value.isValid()
+
+                if(fullName.isBlank() || rawPassword.isBlank() || email.isBlank())
                 {
                     _userState.update { it.copy(errorMessage = "All fields are required.") }
                     return
                 }
-                if (checkedEmail) {
+                if (!checkedEmail) {
                     _userState.update { it.copy(errorMessage = "Invalid email address.") }
                     return
                 }
 
-
-                val user = User(
-                    firstName = fullName,
-                    email = email,
-                    password = hashedPassword,
-
-                    )
-
-
                 viewModelScope.launch {
                     try {
-                        dao.upsertUser(user)
-                         _userState.update { it.copy(
+                        repository.registerNewUser(
+                            email = email,
+                            rawPassword = rawPassword,
+                            firstName = fullName
+                        )
+                        _userState.update { it.copy(
                             firstName = "",
                             password = "",
                             email = "",
@@ -126,17 +104,6 @@ class UserViewModel(private val dao: UserDao) : ViewModel() {
                 ) }
             }
 
-
         }
     }
-   /*
-   *  companion object {
-        fun provideFactory(dao: UserDao): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return UserViewModel(dao) as T
-            }
-        }
-    }
-   * */
 }

@@ -9,19 +9,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import vcmsa.projects.wilproject.adapter.NotesAdapter
 import vcmsa.projects.wilproject.db.EddieDatabase
 import vcmsa.projects.wilproject.event.NotesEvent
 import vcmsa.projects.wilproject.viewModel.NoteViewModel
+import vcmsa.projects.wilproject.firebase.NotesRepo
+import vcmsa.projects.wilproject.firebase.FirebaseDB
 
 class NotesFront : AppCompatActivity() {
 
@@ -42,14 +40,21 @@ class NotesFront : AppCompatActivity() {
             insets
         }
         bottomNavigation = findViewById(R.id.bottom_navigation)
-        // getDatabase
+
+
         val database = EddieDatabase.getDatabase(applicationContext)
+        val notesDao = database.notesDao()
+        val firebaseConnect = FirebaseDB()
 
         sessionManager = SessionManager(this)
 
+
+        val notesRepository = NotesRepo(notesDao, firebaseConnect)
+
+
         viewModel = ViewModelProvider(
             this,
-            NoteViewModel.provideFactory(database.notesDao(), sessionManager)
+            NoteViewModel.provideFactory(notesRepository, sessionManager)
         )[NoteViewModel::class.java]
 
         setupRecyclerView()
@@ -60,16 +65,14 @@ class NotesFront : AppCompatActivity() {
 
     }
     private fun setupBottomNavigation() {
-        // Set the selected item after bottomNavigation is initialized
         bottomNavigation.selectedItemId = R.id.btnNotes
 
         bottomNavigation.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.btnHome -> {
-                    // Navigate to HomePage
                     val intent = Intent(this, HomePage::class.java)
                     startActivity(intent)
-                    finish() // Close current activity to avoid back stack issues
+                    finish()
                     true
                 }
                 R.id.btnCalendar -> {
@@ -123,23 +126,11 @@ class NotesFront : AppCompatActivity() {
     }
 
     private fun observeNotes() {
-        val userId = sessionManager.getUserId() ?: ""
-        if (userId.isBlank()) return
 
         lifecycleScope.launch {
-
-            val database = EddieDatabase.getDatabase(applicationContext)
-            database.notesDao().getNotesByUserId(userId).collect { notes ->
-                adapter.submitList(notes)
-                // Log to see if notes are being loaded
-                println("Loaded ${notes.size} notes for user $userId")
+            viewModel.noteState.collect { state ->
+                adapter.submitList(state.notes)
             }
         }
     }
 }
-/*
-*
-*
-* setupBottomNavigation()
-*
-* */

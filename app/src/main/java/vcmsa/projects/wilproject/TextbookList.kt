@@ -223,7 +223,7 @@ class TextbookList : AppCompatActivity() {
         val file = File(filePath)
 
         if (!file.exists()) {
-            Toast.makeText(this, "Error: Book file not found. Try downloading again.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Error: Book file not found. Try viewing the book again.", Toast.LENGTH_LONG).show()
             return
         }
 

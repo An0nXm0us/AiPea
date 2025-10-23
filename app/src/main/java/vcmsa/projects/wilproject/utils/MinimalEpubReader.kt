@@ -14,7 +14,6 @@ object MinimalEpubReader {
     fun getEpubHtmlContent(epubFile: File, cacheDir: File): Pair<String, File>? {
         Log.d(TAG, "Starting EPUB processing for: ${epubFile.name}")
 
-        // 1. Create a unique, temporary directory for this book's assets
         val extractedDir = File(cacheDir, "epub_${epubFile.nameWithoutExtension}_${System.currentTimeMillis()}")
         if (!extractedDir.mkdirs()) {
             Log.e(TAG, "Failed to create extraction directory: ${extractedDir.absolutePath}")
@@ -23,7 +22,7 @@ object MinimalEpubReader {
 
         if (!unzipEpub(epubFile, extractedDir)) {
             Log.e(TAG, "Failed to unzip EPUB file.")
-            extractedDir.deleteRecursively() // Cleanup failed extraction
+            extractedDir.deleteRecursively()
             return null
         }
         Log.d(TAG, "EPUB successfully extracted to: ${extractedDir.absolutePath}")
@@ -86,10 +85,8 @@ object MinimalEpubReader {
             val builder = factory.newDocumentBuilder()
             val doc = builder.parse(containerFile)
 
-            // Find the <rootfile> tag
             val rootfiles = doc.getElementsByTagName("rootfile")
             if (rootfiles.length > 0) {
-                // Get the 'full-path' attribute value
                 rootfiles.item(0).attributes.getNamedItem("full-path")?.nodeValue
             } else {
                 null
@@ -107,9 +104,8 @@ object MinimalEpubReader {
             val doc = builder.parse(contentFile)
 
             val chapterIds = mutableListOf<String>()
-            val itemMap = mutableMapOf<String, String>() // id -> href (filepath)
+            val itemMap = mutableMapOf<String, String>()
 
-            // 1. Get the item manifest (all files in the book)
             val manifest = doc.getElementsByTagName("manifest").item(0)
             val items = manifest.childNodes
             for (i in 0 until items.length) {
@@ -123,7 +119,6 @@ object MinimalEpubReader {
                 }
             }
 
-            // 2. Get the spine (the reading order of chapters)
             val spine = doc.getElementsByTagName("spine").item(0)
             val itemrefs = spine.childNodes
             for (i in 0 until itemrefs.length) {
@@ -136,7 +131,8 @@ object MinimalEpubReader {
                 }
             }
 
-            // 3. Combine the HTML content
+            val opfPath = contentFile.parentFile.relativeTo(epubRoot).path.replace(File.separatorChar, '/') + "/"
+
             val htmlBuilder = StringBuilder()
 
             htmlBuilder.append("""
@@ -163,11 +159,33 @@ object MinimalEpubReader {
                     val chapterFile = File(contentFile.parentFile, chapterPath)
                     if (chapterFile.exists()) {
                         Log.d(TAG, "Loading chapter: ${chapterFile.name}")
-                        // Read the chapter HTML content
+
                         val chapterHtml = chapterFile.readText(Charsets.UTF_8)
 
-                        val content = chapterHtml.substringAfter("<body>", "").substringBeforeLast("</body>", chapterHtml)
-                        htmlBuilder.append(content)
+                        val cleanedContent = chapterHtml
+                            .substringAfter("<body", "")
+                            .substringAfter(">")
+                            .substringBeforeLast("</body>", "")
+                            .trim()
+
+                        val contentWithAssetsBase = cleanedContent
+                            .replace("src=\"", "src=\"$opfPath")
+                            .replace("src='", "src='$opfPath")
+
+                        val chapterContentWithLinksBase = contentWithAssetsBase
+                            .replace(Regex("href=\"(?!(#|http|mailto|tel):)(.*?)\"", RegexOption.IGNORE_CASE)) { matchResult ->
+                                val originalHref = matchResult.groupValues[2]
+                                "href=\"$opfPath$originalHref\""
+                            }
+                            .replace(Regex("href='(?!(#|http|mailto|tel):)(.*?)'", RegexOption.IGNORE_CASE)) { matchResult ->
+                                val originalHref = matchResult.groupValues[2]
+                                "href='$opfPath$originalHref'"
+                            }
+
+                        htmlBuilder.append("<div id='chapter-$id' class='epub-chapter-container'>")
+                        htmlBuilder.append(chapterContentWithLinksBase)
+                        htmlBuilder.append("</div>")
+
                         htmlBuilder.append("<br><hr style='border: 1px dashed #ccc;'><br>")
                     } else {
                         Log.w(TAG, "Chapter file not found: $chapterPath")

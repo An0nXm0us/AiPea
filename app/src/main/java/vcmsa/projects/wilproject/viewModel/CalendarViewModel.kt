@@ -14,14 +14,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import vcmsa.projects.wilproject.SessionManager
 import vcmsa.projects.wilproject.SortType
-import vcmsa.projects.wilproject.dao.CalendarDao
+import vcmsa.projects.wilproject.firebase.CalendarRepos
+
 import vcmsa.projects.wilproject.event.CalendarEvent
 import vcmsa.projects.wilproject.models.CalendarSchedule
 import vcmsa.projects.wilproject.state.CalendarState
 import java.util.Calendar
 import java.util.Date
-
-class CalendarViewModel(private val dao: CalendarDao, private val sessionManager: SessionManager): ViewModel() {
+class CalendarViewModel(private val repository: CalendarRepos, private val sessionManager: SessionManager): ViewModel() {
 
 
     private val _sortType = MutableStateFlow(SortType.EVENT_NAME)
@@ -34,7 +34,7 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
         _selectedDate,
         _filterType
     ) { sortType, selectedDate, filterType ->
-        // Calculate date range (e.g., current week)
+
         val calendar = Calendar.getInstance().apply { time = selectedDate }
         calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
         val startDate = calendar.time
@@ -42,14 +42,14 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
         calendar.add(Calendar.DAY_OF_WEEK, 6)
         val endDate = calendar.time
 
-        // Get events based on filters
+
         when {
-            filterType != null -> dao.getEventByGroup(
+            filterType != null -> repository.getEventByGroup(
                 sessionManager.getUserId().toString(),
                 filterType
             )
 
-            else -> dao.getEventsByDateRange(
+            else -> repository.getEventsByDateRange(
                 sessionManager.getUserId().toString(),
                 startDate,
                 endDate
@@ -59,14 +59,11 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
         if (flow is Flow<*>) {
             flow as Flow<List<CalendarSchedule>>
         } else {
-            // Convert List to Flow for consistency
             flowOf(flow as List<CalendarSchedule>)
         }
     }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), emptyList())
-    // The previous _calendar flow is removed, as it's redundant.
 
     private val _state = MutableStateFlow(CalendarState())
-    // The state now correctly uses the _events flow, which includes the filter.
     val state = combine(_state, _events, _sortType) { state, events, sortType ->
         state.copy(
             events = events,
@@ -78,7 +75,7 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
         when(events){
             is CalendarEvent.deleteEvent -> {
                 viewModelScope.launch {
-                    dao.deleteEvent(events.event)
+                    repository.deleteEvent(events.event)
                 }
             }
             CalendarEvent.hideDialog -> {
@@ -93,16 +90,12 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
                 val eventDate = _state.value.eventDate
                 val userID = sessionManager.getUserId().toString()
 
-                if(userID.isBlank() || eventName.isBlank() || eventType.isBlank() || eventDescription.isBlank() )
-                {
-                    if(userID.isBlank()){
-                        _state.update { it.copy(errorMessage = "Error: Current user is not authorised to enter notes") }
-                        return
-                    }
-                    _state.update { it.copy(errorMessage = "Error regarding entering notes") }
+                if(userID.isBlank()){
+                    _state.update { it.copy(errorMessage = "Error: Current user is not authorised to enter notes") }
                     return
                 }
                 if (eventName.isBlank() || eventType.isBlank() || eventDescription.isBlank()) {
+                    _state.update { it.copy(errorMessage = "Error regarding entering notes") }
                     return
                 }
 
@@ -111,10 +104,10 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
                     eventType = eventType,
                     eventDescription = eventDescription,
                     eventDate = eventDate,
-                    userId = userID
+                    event_userId = userID
                 )
                 viewModelScope.launch {
-                    dao.insertEvent(calendarEvent)
+                    repository.saveEvent(calendarEvent)
                     _state.update { it.copy(
                         isAddingEvent = false,
                         eventName = "",
@@ -181,10 +174,11 @@ class CalendarViewModel(private val dao: CalendarDao, private val sessionManager
         }
     }
     companion object {
-        fun provideFactory(dao: CalendarDao, sessionManager: SessionManager): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+
+        fun provideFactory(repository: CalendarRepos, sessionManager: SessionManager): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return CalendarViewModel(dao,sessionManager) as T
+                return CalendarViewModel(repository,sessionManager) as T
             }
         }
     }
