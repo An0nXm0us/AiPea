@@ -4,139 +4,170 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    >
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <!-- Modern App Bar -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="64dp"
             android:background="@color/green"
-            android:padding="15dp">
+            android:elevation="4dp"
+            android:paddingHorizontal="16dp">
 
             <ImageView
                 android:id="@+id/btnClose"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="16dp"
                 android:src="@drawable/ic_close"
                 app:tint="@android:color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:text="Create Note"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02" />
         </RelativeLayout>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Math"
-            android:textColor="@android:color/white"
-            android:background="@drawable/bg_green_button"
-            android:layout_marginStart="8dp" />
-        <!-- Input Row -->
+
+        <!-- Content Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:weightSum="2">
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="24dp">
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_input_field"
-                android:hint="Subject"
-                android:padding="10dp"
-                android:textSize="14sp"
-                tools:ignore="TouchTargetSizeCheck" />
+            <!-- Subject Selection -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Math"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_primary_button"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_input_field"
-                android:hint="Note Name"
-                android:padding="10dp"
-                android:textSize="14sp"
-                tools:ignore="TouchTargetSizeCheck" />
-        </LinearLayout>
-
-        <!-- Notes Count & Save -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:layout_width="238dp"
-                android:layout_height="29dp"
-                android:text="Total Notes - 24"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
-
+            <!-- Input Row -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:weightSum="2"
+                android:layout_marginBottom="20dp">
 
-                <ImageView
-                    android:layout_width="79dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/lock" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="Subject"
+                    android:paddingHorizontal="16dp"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:hintTextColor="#999999" />
 
-                <Button
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="Note Name"
+                    android:paddingHorizontal="16dp"
+                    android:textSize="16sp"
+                    android:textColor="#333333"
+                    android:hintTextColor="#999999" />
+            </LinearLayout>
+
+            <!-- Notes Count & Save -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total Notes - 24"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/bg_green_button"
-                    android:layout_marginStart="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:text="Save"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/bg_primary_button"
+                        android:paddingHorizontal="32dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- Section Header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Available Subjects"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Subject Cards - Professional Color Palette -->
+            <TextView
+                style="@style/SubjectCard"
+                android:background="@drawable/bg_subject_card_neutral"
+                android:text="Math 101"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                style="@style/SubjectCard"
+                android:background="@drawable/bg_subject_card_neutral"
+                android:text="Algebra"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                style="@style/SubjectCard"
+                android:background="@drawable/bg_subject_card_neutral"
+                android:text="Calculus And Analysis"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                style="@style/SubjectCard"
+                android:background="@drawable/bg_subject_card_neutral"
+                android:text="Geometry And Topology"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                style="@style/SubjectCard"
+                android:background="@drawable/bg_subject_card_neutral"
+                android:text="Number Theory"
+                android:layout_marginBottom="12dp" />
+
         </LinearLayout>
-
-        <!-- Subject Cards -->
-        <TextView
-            style="@style/SubjectCard"
-            android:background="@drawable/bg_subject_card_pink"
-            android:text="Math 101"
-            android:layout_marginTop="16dp" />
-
-        <TextView
-            style="@style/SubjectCard"
-            android:background="@drawable/bg_subject_card_blue"
-            android:text="Algebra" />
-
-        <TextView
-            style="@style/SubjectCard"
-            android:background="@drawable/bg_subject_card_purple"
-            android:text="Calculus And Analysis" />
-
-        <TextView
-            style="@style/SubjectCard"
-            android:background="@drawable/bg_subject_card_green"
-            android:text="Geometry And Topology" />
-
-        <TextView
-            style="@style/SubjectCard"
-            android:background="@drawable/bg_subject_card_pink"
-            android:text="Number Theory" />
-
     </LinearLayout>
 </ScrollView>
