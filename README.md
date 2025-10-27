@@ -4,30 +4,30 @@ Eddie is a comprehensive educational Android application that provides students 
 
 ## Features
 
-### 📚 Textbook Reader
+###  Textbook Reader
 - Support for EPUB and PDF formats
 - Text highlighting and search functionality
 - Local file management
 - Online book search and download
 
-### 📝 Notes Management
+###  Notes Management
 - Create, edit, and delete notes
 - Cloud synchronization
 - Organized note listing
 
-### 📅 Calendar & Scheduling
+###  Calendar & Scheduling
 - Event creation and management
 - Event categorization (Classes, Assignments, Exams, Personal)
 - Filter events by type
 - Local and cloud storage
 
-### 🤖 AI Assistant
+###  AI Assistant
 - Chat with Gemini AI
 - Conversation history
 - Multiple chat sessions
 - Real-time responses
 
-### 🔐 User Authentication
+###  User Authentication
 - Secure login and registration
 - Session management
 - Password reset functionality
@@ -64,10 +64,6 @@ Eddie is a comprehensive educational Android application that provides students 
 |---------------|------------|-----------|------------------|
 | ![Calendar View](https://github.com/user-attachments/assets/03802bb8-be1d-44ac-8f99-bd646c696c0d) | ![Event List](https://github.com/user-attachments/assets/f91375ed-4966-4924-b332-4ba8dfcc0b09) | ![Add Event](https://github.com/user-attachments/assets/8a6689bd-dad4-43fa-b172-30bf0f53cee6) | ![Event Categories](https://github.com/user-attachments/assets/0101e55a-588c-42a9-9f3b-bfc8c4ceed41) |
 
-### AI Assistant Module
-| Chat History | Message Interface | New Chat | AI Responses |
-|--------------|-------------------|----------|--------------|
-| ![Chat History](https://github.com/user-attachments/assets/cd5e96e8-4703-437c-81d2-655c06b8259e) | ![Message Interface](https://github.com/user-attachments/assets/c477072e-0abd-4f1b-b2d5-c1ad055519bc) | ![New Chat](https://github.com/user-attachments/assets/967c3d45-f0ab-4d3c-b74e-022f5c90b021) | ![AI Responses](https://github.com/user-attachments/assets/2cd83ac3-f0a3-458d-9d0d-18b7367cec40) |
 
 ## User Manuals
 
