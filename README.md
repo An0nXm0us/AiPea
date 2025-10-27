@@ -32,38 +32,6 @@ Eddie is a comprehensive educational Android application that provides students 
 - Session management
 - Password reset functionality
 
-## App Screenshots
-
-### Authentication & Onboarding
-| Welcome Screen | Login Screen | Sign Up Screen | Forgot Password |
-|----------------|--------------|----------------|-----------------|
-| ![Welcome Screen](https://github.com/user-attachments/assets/cd5e96e8-4703-437c-81d2-655c06b8259e) | ![Login Screen](https://github.com/user-attachments/assets/c477072e-0abd-4f1b-b2d5-c1ad055519bc) | ![Sign Up Screen](https://github.com/user-attachments/assets/967c3d45-f0ab-4d3c-b74e-022f5c90b021) | ![Forgot Password](https://github.com/user-attachments/assets/2cd83ac3-f0a3-458d-9d0d-18b7367cec40) |
-
-### Home & Navigation
-| Home Dashboard | Bottom Navigation | Feature Cards |
-|----------------|-------------------|---------------|
-| ![Home Dashboard](https://github.com/user-attachments/assets/12886e9a-3d32-446d-a8c7-3a5925b5ca9a) | ![Navigation](https://github.com/user-attachments/assets/1d61ecd1-b26d-4cd2-aaac-0b5f54153c98) | ![Feature Cards](https://github.com/user-attachments/assets/c8375a23-351f-4b18-9fa9-b3ec68bac916) |
-
-### Textbook Module
-| Book Search | Book List | EPUB Reader | PDF Viewer |
-|-------------|-----------|-------------|------------|
-| ![Book Search](https://github.com/user-attachments/assets/8568f6eb-68b2-4c3a-9f28-02d2aa9d048f) | ![Book List](https://github.com/user-attachments/assets/9c7eab58-2b3b-43cf-bf0c-f789f4150e67) | ![EPUB Reader](https://github.com/user-attachments/assets/ba5f4846-5d2e-4e50-9e25-ba6eb1f3defb) | ![PDF Viewer](https://github.com/user-attachments/assets/5f83e5d1-01c5-4429-894e-892b9768c9a7) |
-
-### Reading Features
-| Text Highlighting | In-book Search | Download Progress |
-|-------------------|----------------|-------------------|
-| ![Text Highlighting](https://github.com/user-attachments/assets/a62708df-c3de-488e-9c85-32bd8d51e956) | ![In-book Search](https://github.com/user-attachments/assets/4c075a0a-7abc-47a8-bcbb-d20d28e05efc) | ![Download Progress](https://github.com/user-attachments/assets/1c434f4a-eacf-42be-a907-36ecd7aefd63) |
-
-### Notes Module
-| Notes List | Add Note | Edit Note |
-|------------|----------|-----------|
-| ![Notes List](https://github.com/user-attachments/assets/7dc43934-80bd-467c-a8c0-ea9d7e68340a) | ![Add Note](https://github.com/user-attachments/assets/5922308d-1c23-4a53-acc7-9eeacfa947b3) | ![Edit Note](https://github.com/user-attachments/assets/e4f5d3b1-595e-4adf-8764-4278b8f8a149) |
-
-### Calendar Module
-| Calendar View | Event List | Add Event | Event Categories |
-|---------------|------------|-----------|------------------|
-| ![Calendar View](https://github.com/user-attachments/assets/03802bb8-be1d-44ac-8f99-bd646c696c0d) | ![Event List](https://github.com/user-attachments/assets/f91375ed-4966-4924-b332-4ba8dfcc0b09) | ![Add Event](https://github.com/user-attachments/assets/8a6689bd-dad4-43fa-b172-30bf0f53cee6) | ![Event Categories](https://github.com/user-attachments/assets/0101e55a-588c-42a9-9f3b-bfc8c4ceed41) |
-
 
 ## User Manuals
 
