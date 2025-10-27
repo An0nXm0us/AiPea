@@ -34,6 +34,39 @@ Eddie is a comprehensive educational Android application that provides students 
 
 ## APP Screenshots
 ![WhatsApp Image 2025-10-27 at 12 09 58_6dd9e5d1](https://github.com/user-attachments/assets/cd5e96e8-4703-437c-81d2-655c06b8259e)
+![WhatsApp Image 2025-10-27 at 12 09 59_61af244d](https://github.com/user-attachments/assets/c477072e-0abd-4f1b-b2d5-c1ad055519bc)
+![WhatsApp Image 2025-10-27 at 12 09 58_ee1b48a7](https://github.com/user-attachments/assets/967c3d45-f0ab-4d3c-b74e-022f5c90b021)
+![WhatsApp Image 2025-10-27 at 12 10 08_b7f3c6a9](https://github.com/user-attachments/assets/2cd83ac3-f0a3-458d-9d0d-18b7367cec40)
+![WhatsApp Image 2025-10-27 at 12 09 59_7193edb6](https://github.com/user-attachments/assets/12886e9a-3d32-446d-a8c7-3a5925b5ca9a)
+![WhatsApp Image 2025-10-27 at 12 10 00_f374f2d6](https://github.com/user-attachments/assets/1d61ecd1-b26d-4cd2-aaac-0b5f54153c98)
+![WhatsApp Image 2025-10-27 at 12 10 03_4ef6794b](https://github.com/user-attachments/assets/c8375a23-351f-4b18-9fa9-b3ec68bac916)
+![WhatsApp Image 2025-10-27 at 12 10 03_e1f89a35](https://github.com/user-attachments/assets/8568f6eb-68b2-4c3a-9f28-02d2aa9d048f)
+![WhatsApp Image 2025-10-27 at 12 10 03_cb417cd3](https://github.com/user-attachments/assets/9c7eab58-2b3b-43cf-bf0c-f789f4150e67)
+![WhatsApp Image 2025-10-27 at 12 10 04_05faa881](https://github.com/user-attachments/assets/ba5f4846-5d2e-4e50-9e25-ba6eb1f3defb)
+![WhatsApp Image 2025-10-27 at 12 10 04_718c040c](https://github.com/user-attachments/assets/5f83e5d1-01c5-4429-894e-892b9768c9a7)
+![WhatsApp Image 2025-10-27 at 12 10 04_a360795e](https://github.com/user-attachments/assets/a62708df-c3de-488e-9c85-32bd8d51e956)
+![WhatsApp Image 2025-10-27 at 12 10 04_3882a2d3](https://github.com/user-attachments/assets/4c075a0a-7abc-47a8-bcbb-d20d28e05efc)
+![WhatsApp Image 2025-10-27 at 12 10 05_66de3ce7](https://github.com/user-attachments/assets/1c434f4a-eacf-42be-a907-36ecd7aefd63)
+![WhatsApp Image 2025-10-27 at 12 10 05_9bfc506f](https://github.com/user-attachments/assets/7dc43934-80bd-467c-a8c0-ea9d7e68340a)
+![WhatsApp Image 2025-10-27 at 12 10 05_d4aef6de](https://github.com/user-attachments/assets/5922308d-1c23-4a53-acc7-9eeacfa947b3)
+![WhatsApp Image 2025-10-27 at 12 10 06_031a7e3e](https://github.com/user-attachments/assets/e4f5d3b1-595e-4adf-8764-4278b8f8a149)
+![WhatsApp Image 2025-10-27 at 12 10 06_38783075](https://github.com/user-attachments/assets/03802bb8-be1d-44ac-8f99-bd646c696c0d)
+![WhatsApp Image 2025-10-27 at 12 10 07_8772b8ad](https://github.com/user-attachments/assets/f91375ed-4966-4924-b332-4ba8dfcc0b09)
+![WhatsApp Image 2025-10-27 at 12 10 07_aa9ca3af](https://github.com/user-attachments/assets/8a6689bd-dad4-43fa-b172-30bf0f53cee6)
+![WhatsApp Image 2025-10-27 at 12 10 07_c07f901e](https://github.com/user-attachments/assets/0101e55a-588c-42a9-9f3b-bfc8c4ceed41)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Main Screens
