@@ -80,7 +80,6 @@ Eddie is a comprehensive educational Android application that provides students 
 
 ### Troubleshooting
 - **Login Issues**: Password reset and account recovery
-- **Sync Problems**: Handling offline/online synchronization
 - **File Access**: Managing storage permissions
 - **Performance**: Optimizing app performance
 
