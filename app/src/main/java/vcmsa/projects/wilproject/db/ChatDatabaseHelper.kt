@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import vcmsa.projects.wilproject.models.ChatSession
 import vcmsa.projects.wilproject.models.Message
-
+//All local functions regarding the chat feature (Ahmed Guedmioui, 2024)
 class ChatDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {

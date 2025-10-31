@@ -25,5 +25,8 @@ interface CalendarDao {
     @Query("SELECT * FROM events WHERE event_userId = :userId AND eventDate BETWEEN :startDate AND :endDate ORDER BY eventDate ASC")
     fun getEventsByDateRange(userId: String, startDate: Date, endDate: Date): Flow<List<CalendarSchedule>>
 
+    @Query("SELECT * FROM events WHERE event_userId = :userId LIMIT 1")
+    suspend fun getAnyEvent(userId: String): CalendarSchedule?
+
 
 }

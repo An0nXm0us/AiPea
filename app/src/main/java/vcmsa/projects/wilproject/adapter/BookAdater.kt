@@ -63,7 +63,7 @@ class BookAdapter(
                     statusText.isVisible = !hasPdf || status == DownloadStatus.FAILED
 
                     if (!hasPdf) {
-                        statusText.text = "Download link unavailable"
+                        statusText.text = "Book link unavailable"
                     } else if (status == DownloadStatus.FAILED) {
                         statusText.text = "Failed! Try again."
                     } else {
@@ -77,7 +77,7 @@ class BookAdapter(
                     viewPdfButton.isVisible = false
                     progressBar.isVisible = true
                     statusText.isVisible = true
-                    statusText.text = if (status == DownloadStatus.PENDING) "Queued..." else "Downloading..."
+                    statusText.text = if (status == DownloadStatus.PENDING) "Queued..." else "Fetching Book..."
                     downloadButton.setOnClickListener(null)
                 }
                 DownloadStatus.COMPLETE -> {
@@ -85,7 +85,7 @@ class BookAdapter(
                     viewPdfButton.isVisible = true
                     progressBar.isVisible = false
                     statusText.isVisible = true
-                    statusText.text = "Downloaded (Path Pending)"
+                    statusText.text = "Found  (Path Pending)"
                 }
             }
         }

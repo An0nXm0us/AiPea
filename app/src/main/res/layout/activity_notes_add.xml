@@ -6,77 +6,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:background="#FAFAFA"
     tools:context=".NotesAdd">
 
-    <!-- Green Header -->
-    <LinearLayout
+    <!-- Modern App Bar -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#08AE77"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:layout_height="64dp"
+        android:background="@color/green"
+        android:elevation="4dp"
+        android:paddingHorizontal="16dp">
 
-
-
-        <!-- Header Title -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:layout_centerInParent="true"
             android:text="Add Notes"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginLeft="16dp" />
+            android:letterSpacing="0.02" />
+
+    </RelativeLayout>
+
+    <!-- Content Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="24dp">
+
+        <!-- Title Input -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/edTitle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="24dp"
+            android:paddingHorizontal="16dp"
+            android:background="@drawable/edit_shape"
+            android:hint="Enter note title"
+            android:textColor="#333333"
+            android:textColorHint="#999999"
+            android:textSize="16sp" />
+
+        <!-- Description Input -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textColor="#333333"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/edDesc"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="24dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="16dp"
+            android:background="@drawable/edit_shape"
+            android:gravity="top"
+            android:hint="Enter note description"
+            android:textColor="#333333"
+            android:textColorHint="#999999"
+            android:textSize="16sp"
+            android:inputType="textMultiLine"
+            android:minLines="8" />
+
+        <!-- Add Button -->
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_primary_button"
+            android:text="Add Note"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@null"  />
 
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/edTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="16dp"
-        android:padding="16dp"
-        android:background="@drawable/edit_shape"
-        android:hint="Title"
-        android:textColor="#08AE77"
-        android:textColorHint="#666666"
-        android:textSize="18sp"
-        android:elevation="2dp" />
-
-    <EditText
-        android:id="@+id/edDesc"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="16dp"
-        android:padding="16dp"
-        android:background="@drawable/edit_shape"
-        android:hint="Description"
-        android:gravity="top"
-        android:textColor="#08AE77"
-        android:textColorHint="#666666"
-        android:textSize="16sp"
-        android:inputType="textMultiLine"
-        android:minLines="5"
-        android:elevation="2dp" />
-
-    <!-- Green Add Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/addButton"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#08AE77"
-        android:text="Add Note"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:cornerRadius="8dp"
-        android:elevation="4dp" />
-
 </LinearLayout>

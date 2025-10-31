@@ -15,26 +15,41 @@ import kotlinx.coroutines.launch
 import vcmsa.projects.wilproject.SessionManager
 import vcmsa.projects.wilproject.SortType
 import vcmsa.projects.wilproject.firebase.CalendarRepos
-
 import vcmsa.projects.wilproject.event.CalendarEvent
 import vcmsa.projects.wilproject.models.CalendarSchedule
 import vcmsa.projects.wilproject.state.CalendarState
 import java.util.Calendar
 import java.util.Date
-class CalendarViewModel(private val repository: CalendarRepos, private val sessionManager: SessionManager): ViewModel() {
 
+/**
+ * This view model will be using both its repective dao and repo methods to save locally and on firebase
+ * (Tadas Petra.2024 & Philipp Lackner,2023)
+ * The state wil be used and reflected on ui (Philipp Lackner,2022)
+ **/
+class CalendarViewModel(val repository: CalendarRepos, private val sessionManager: SessionManager): ViewModel() {
 
+    init {
+        // Fetch and listen for all events for the current user from Firebase.
+        viewModelScope.launch {
+            repository.syncEvents(sessionManager.getUserId().toString())
+        }
+    }
+
+    // State  for filtering and sorting events.
     private val _sortType = MutableStateFlow(SortType.EVENT_NAME)
-
     private val _selectedDate = MutableStateFlow(Date())
     private val _filterType = MutableStateFlow<String?>(null)
 
+    //Dynamically fetches the events based on how they  are sorted by the type of event
     private val _events = combine(
         _sortType,
         _selectedDate,
         _filterType
     ) { sortType, selectedDate, filterType ->
 
+        val userId = sessionManager.getUserId().toString()
+
+        // Calculate the start and end dates of the week based on the selected date.
         val calendar = Calendar.getInstance().apply { time = selectedDate }
         calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
         val startDate = calendar.time
@@ -42,18 +57,12 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
         calendar.add(Calendar.DAY_OF_WEEK, 6)
         val endDate = calendar.time
 
-
+        // Determine which repository call to make based on the filter.
         when {
-            filterType != null -> repository.getEventByGroup(
-                sessionManager.getUserId().toString(),
-                filterType
-            )
-
-            else -> repository.getEventsByDateRange(
-                sessionManager.getUserId().toString(),
-                startDate,
-                endDate
-            )
+            // If a filter type is set, fetch all events of that type.
+            filterType != null -> repository.getEventByGroup(userId, filterType)
+            // Otherwise, fetch events within weekly range.
+            else -> repository.getEventsByDateRange(userId, startDate, endDate)
         }
     }.flatMapLatest { flow ->
         if (flow is Flow<*>) {
@@ -61,28 +70,44 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
         } else {
             flowOf(flow as List<CalendarSchedule>)
         }
-    }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), emptyList())
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Companion.WhileSubscribed(5000),
+        emptyList()
+    )
 
+    // State for the overall UI (dialog status, input fields, error messages).
     private val _state = MutableStateFlow(CalendarState())
-    val state = combine(_state, _events, _sortType) { state, events, sortType ->
+    //UI will use the UI state and the collected event list to find information
+     val state = combine(_state, _events, _sortType) { state, events, sortType ->
         state.copy(
-            events = events,
-            sortType = sortType
+            events = events, // Updated list of filtered/date-range events
+            sortType = sortType // Current sort type
         )
-    }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), CalendarState())
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Companion.WhileSubscribed(5000),
+        CalendarState()
+    )
 
+    /**
+     * Processes incoming user events/actions from the UI.
+     */
     fun onEvent(events: CalendarEvent){
         when(events){
+            // Deletes an event from the locally and on Firebase
             is CalendarEvent.deleteEvent -> {
                 viewModelScope.launch {
                     repository.deleteEvent(events.event)
                 }
             }
+            // Hides the event creation/edit dialog and clears the error message.
             CalendarEvent.hideDialog -> {
                 _state.update { it.copy(
                     isAddingEvent = false
                 )}
             }
+            // Validates and saves a new event to the repository (and Firebase).
             is CalendarEvent.saveEvent ->{
                 val eventName = _state.value.eventName
                 val eventType = _state.value.eventType
@@ -90,6 +115,7 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
                 val eventDate = _state.value.eventDate
                 val userID = sessionManager.getUserId().toString()
 
+                // Validation checks
                 if(userID.isBlank()){
                     _state.update { it.copy(errorMessage = "Error: Current user is not authorised to enter notes") }
                     return
@@ -106,6 +132,8 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
                     eventDate = eventDate,
                     event_userId = userID
                 )
+
+                // Save the event and reset the local state upon successful save.
                 viewModelScope.launch {
                     repository.saveEvent(calendarEvent)
                     _state.update { it.copy(
@@ -120,18 +148,18 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
                     )}
                 }
             }
+            // Updates the internal state for the current user ID.
             is CalendarEvent.setUserID -> {
-                _state.update { it.copy(
-
-                ) }
+                _state.update { it.copy() }
             }
+            // Updates the description field in the state.
             is CalendarEvent.setEventDescription -> {
                 _state.update { it.copy(
                     eventDescription = events.eventDescription,
                     errorMessage = null
-
                 ) }
             }
+            // Updates the event name field in the state.
             is CalendarEvent.setEventName -> {
                 _state.update {
                     it.copy(
@@ -140,6 +168,7 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
                     )
                 }
             }
+            // Updates the event type field in the state.
             is CalendarEvent.setEventType -> {
                 _state.update {
                     it.copy(
@@ -148,21 +177,26 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
                     )
                 }
             }
+            // Shows the event creation/edit dialog.
             CalendarEvent.showDialog -> {
                 _state.update{ it.copy(
                     isAddingEvent = true
                 )}
             }
+            // Updates the sort type
             is CalendarEvent.sortEvent -> {
                 _sortType.value = events.sortType
             }
+            // Updates the selected date
             is CalendarEvent.selectDate -> {
                 _selectedDate.value = events.date
             }
+            // Updates the filter
             is CalendarEvent.filterByType -> {
                 _filterType.value = events.eventType
             }
 
+            // Updates the event date
             is CalendarEvent.setEventDate -> {
                 _state.update {
                     it.copy(
@@ -173,11 +207,14 @@ class CalendarViewModel(private val repository: CalendarRepos, private val sessi
 
         }
     }
+
+
     companion object {
 
         fun provideFactory(repository: CalendarRepos, sessionManager: SessionManager): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                // Ensure the ViewModel class matches before casting and returning.
                 return CalendarViewModel(repository,sessionManager) as T
             }
         }

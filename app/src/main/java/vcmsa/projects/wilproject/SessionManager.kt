@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 open class SessionManager(context: Context) {
+    //this class handles tracking users locally so that their id can be tracked  ( Ketul Patel ,2015.)
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
 
     companion object {
@@ -29,12 +30,7 @@ open class SessionManager(context: Context) {
     fun isLoggedIn(): Boolean {
         return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false) && getUserId() != null
     }
-    fun getUserInfo(): Triple<String?, String?, String?> {
-        val userId = sharedPreferences.getString(KEY_USER_ID, null)
-        val email = sharedPreferences.getString(KEY_USER_EMAIL, null)
-        val name = sharedPreferences.getString(KEY_USER_NAME, null)
-        return Triple(userId, email, name)
-    }
+
 
     fun clearSession() {
         val editor = sharedPreferences.edit()

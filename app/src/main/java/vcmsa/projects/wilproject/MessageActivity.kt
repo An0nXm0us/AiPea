@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 import vcmsa.projects.wilproject.adapter.MessageAdapter
 import vcmsa.projects.wilproject.db.ChatDatabaseHelper
 import vcmsa.projects.wilproject.models.Message
-
+//Chat interaction (Google AI for Developers, (n.d.))
 class MessageActivity : AppCompatActivity() {
 
     private lateinit var chatRecyclerView: RecyclerView

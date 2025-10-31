@@ -20,7 +20,10 @@ import vcmsa.projects.wilproject.viewModel.UserViewModel
 import vcmsa.projects.wilproject.firebase.UserRepo
 import vcmsa.projects.wilproject.firebase.FirebaseDB
 
+
 class ForgotPassword : AppCompatActivity() {
+    // UI elements for input and action
+    private lateinit var userEmail: EditText
     private lateinit var etNewPassword: EditText
     private lateinit var etConfirmPassword: EditText
     private lateinit var btnResetPassword: Button
@@ -28,9 +31,8 @@ class ForgotPassword : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var tvSuccessMessage: TextView
     private lateinit var tvErrorMessage: TextView
-
     private lateinit var viewModel: UserViewModel
-    private lateinit var userEmail: EditText
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,16 +51,18 @@ class ForgotPassword : AppCompatActivity() {
             UserViewModel.provideFactory(userRepo)
         )[UserViewModel::class.java]
 
+        // Setup the UI components
         initializeViews()
         setupClickListeners()
         setupPasswordValidation()
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
+       ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
+
 
     private fun initializeViews() {
         userEmail = findViewById(R.id.etEmail)
@@ -76,10 +80,12 @@ class ForgotPassword : AppCompatActivity() {
             onBackPressed()
         }
 
+        // Trigger the password reset process
         btnResetPassword.setOnClickListener {
             handlePasswordReset()
         }
     }
+
 
     private fun setupPasswordValidation() {
         val passwordTextWatcher = object : TextWatcher {
@@ -94,16 +100,21 @@ class ForgotPassword : AppCompatActivity() {
         etConfirmPassword.addTextChangedListener(passwordTextWatcher)
     }
 
+    // Compares the new password and confirm password, updates button state,
+    //  and sets error messages if validation fails.
     private fun validatePasswords() {
         val newPassword = etNewPassword.text.toString()
         val confirmPassword = etConfirmPassword.text.toString()
 
+        // Check if passwords match and meet the minimum length (6 characters)
         val doPasswordsMatch =
             newPassword == confirmPassword && newPassword.length >= 6
 
+        // Enable/disable the reset button and adjust its alpha for visual feedback
         btnResetPassword.isEnabled = doPasswordsMatch
         btnResetPassword.alpha = if (btnResetPassword.isEnabled) 1.0f else 0.5f
 
+        // Display an error on the confirm password field if they don't match
         if (confirmPassword.isNotEmpty() && !doPasswordsMatch) {
             etConfirmPassword.error = "Passwords do not match"
         } else {
@@ -111,17 +122,19 @@ class ForgotPassword : AppCompatActivity() {
         }
     }
 
+    //handles resting password process
     private fun handlePasswordReset() {
         val newPassword = etNewPassword.text.toString()
         val confirmPassword = etConfirmPassword.text.toString()
         val email = userEmail.text.toString()
 
+        // validation checks
         if (email.isBlank()) {
             showError("Cannot reset password: User email is missing.")
             return
         }
         if (newPassword.length < 6) {
-            showError("Password must be at least 6 characters.")
+            showError("New password must be at least 6 characters.")
             return
         }
         if (newPassword != confirmPassword) {
@@ -129,52 +142,60 @@ class ForgotPassword : AppCompatActivity() {
             return
         }
 
-        setLoadingState(true)
-
-        lifecycleScope.launch {
-
+        setLoadingState(true) // Show progress indicator
+ lifecycleScope.launch {
+            // Call call view model to rest passowrd
             val success = viewModel.resetPassword(email, newPassword)
 
-            setLoadingState(false)
+            setLoadingState(false) // Hide progress indicator
 
             if (success) {
                 showSuccessMessage()
+                // Navigate back to the Login screen after a 3-second delay
                 Handler(Looper.getMainLooper()).postDelayed({
                     navigateToLogin()
                 }, 3000)
             } else {
-
+                // Show error if the reset failed (e.g., email not registered or network issue)
                 showError("Failed to reset password. Check if the email address is registered.")
             }
         }
     }
+
 
     private fun setLoadingState(isLoading: Boolean) {
         btnResetPassword.isEnabled = !isLoading
         progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         btnResetPassword.text = if (isLoading) "Resetting..." else "Reset Password"
 
+        // Disable input fields while loading to prevent changes during the process
         userEmail.isEnabled = !isLoading
         etNewPassword.isEnabled = !isLoading
         etConfirmPassword.isEnabled = !isLoading
     }
+
 
     private fun showSuccessMessage() {
         tvSuccessMessage.visibility = View.VISIBLE
         findViewById<LinearLayout>(R.id.formSection)?.visibility = View.GONE
     }
 
+
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
+
     private fun navigateToLogin() {
         val intent = Intent(this, Login::class.java).apply {
+            // Clears all activities above Login and makes it the new root of the task
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         }
         startActivity(intent)
-        finish()
+        finish() // Close the ForgotPassword activity
     }
+
+
     override fun onBackPressed() {
         super.onBackPressed()
         navigateToLogin()

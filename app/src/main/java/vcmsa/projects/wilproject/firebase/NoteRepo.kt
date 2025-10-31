@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import vcmsa.projects.wilproject.firebase.FirebaseDB
 import vcmsa.projects.wilproject.dao.NotesDao
 import vcmsa.projects.wilproject.models.Notes
 

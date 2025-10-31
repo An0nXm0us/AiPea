@@ -34,7 +34,6 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // 1. Setup Core Dependencies
         val database = Room.databaseBuilder(
             applicationContext,
             EddieDatabase::class.java,

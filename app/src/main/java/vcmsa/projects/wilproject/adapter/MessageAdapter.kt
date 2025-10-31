@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import vcmsa.projects.wilproject.models.Message
 import vcmsa.projects.wilproject.R
-
+//(Google AI for Developers, (n.d.))
 class MessageAdapter(private val messages: List<Message>) :
     RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 

@@ -1,0 +1,46 @@
+Android Developers. (n.d.). Create a card-based layout.
+[online] Available at: https://developer.android.com/develop/ui/views/layout/cardview
+[Accessed 10 October 2025].
+Android Developers. (n.d.). Calendar.
+[online] Available at: https://developer.android.com/reference/android/icu/util/Calendar
+[Accessed 28 August 2025].
+Build an AI Chat App With Gemini (Android Tutorial). 2024. YouTube Video, added by
+Ahmed Guedmioui. [Online]. Available at
+Codes Easy.2021. Load PDF in Android using WebView - #AndroidStudio. [online] YouTube. Available at: https://www.youtube.com/watch?v=dFgVX1h3gOg [Accessed 31 Oct. 2025].
+Coding Shiksha.2023. Build a EPUB File Reader & Viewer With Custom Controls in Browser Using HTML5 & Javascript. [online] YoutTube Available at: https://youtu.be/Ja7z4mhf1tY?si=AhIf6E4Z9Fo-D_U1 [Accessed 31 Oct. 2025].
+SkyFish. “Functional Unit Testing Kotlin View Models and Use Cases.” YouTube, 25 Sept. 2023, www.youtube.com/watch?v=4aa0cyIgG8s.
+Accessed 5 October 2025.
+freeCodeCamp.org (2023). Kotlin & Android Development Course: Build a Quiz Application.
+[online] YouTube. Available at: https://www.youtube.com/watch?v=kNghEbknLs8 [Accessed 19 October 2025].
+GeeksforGeeks (2022). Calendar View App in Android with Kotlin.
+[online] GeeksforGeeks. Available at: https://www.geeksforgeeks.org/kotlin/calendar-view-app-in-android-with-kotlin/
+[Accessed 2 September 2025].
+GeeksforGeeks (2020). How to Create a Quiz App In Android? [online] GeeksforGeeks.
+Available at: https://www.geeksforgeeks.org/android/how-to-create-a-quiz-app-in-android/
+[Accessed 19 October 2025].
+Islam, F. 2025. Build a Simple Calendar App in Kotlin.
+[online] Medium. Available at: https://medium.com/@imfaisal_38328/build-a-simple-calendar-app-in-kotlin-786918684f16
+[Accessed 2 September 2025].
+Master, T. 2021. Kotlin Android Quiz App in Android Studio. [online] Techpass Master.
+Available at: https://techpassmaster.com/kotlin-android-quiz-app/.
+[Accessed 2 September 2025]
+SSOJet.2022. SHA-512 in Kotlin | SSOJet. [online] SSOJet | Enterprise-Grade SSO in Minutes,Not Days or Months.
+Available at: https://ssojet.com/hashing/sha-512-in-kotlin/ [Accessed 7 October 2025].
+Philipp Lackner.2021. The Ultimate Retrofit Crash Course. [online]
+YouTube. Available at: https://www.youtube.com/watch?v=t6Sql3WMAnk [Accessed 7 October 2025].
+Ketul Patel .2015. Session Manager in Android Studio | Android Tutorial’s. [online] YoutTube Available at: https://youtu.be/SLkQIlfRWgM?si=-s5dIa3l6nKtnCVD [Accessed 2 May 2025].
+Philipp Lackner.2025.  The FULL Beginner Guide for Room in Android | Local Database Tutorial for Android. [online] YoutTube Available at: https://youtu.be/bOd3wO0uFr8?si=u1qhRvUiXbiEoYIX [Accessed 31 Oct. 2025].
+Cambo Tutorial.2025.  Convert Web to App - Scrape Injecting JavaScript Bridge with WebView, Android Studio Part 1. [online] YoutTube Available at: https://youtu.be/3jZ4dMeJR1A?si=rToH_YT5PKrX6edq 
+[Accessed 7 Mar. 2021].
+Codes Easy (2021). Load PDF in Android using WebView - #AndroidStudio. [online] 
+YouTube. Available at: https://www.youtube.com/watch?v=dFgVX1h3gOg [Accessed 31 October 2025]
+Philipp Lackner.2022. The ULTIMATE Guide to Room Migration in Android (Database Migration Tutorial). [online] Youtube.
+Available at: https://youtu.be/hrJZIF7qSSw?si=WwCpgUjJcKU_3GQB [Accessed 31 October 2025].
+Philipp Lackner.2023.  The FULL Beginner Guide for Room in Android | Local Database Tutorial for Android. [online] YoutTube
+Available at: https://youtu.be/bOd3wO0uFr8?si=u1qhRvUiXbiEoYIX [Accessed 31 October 2025].
+The Android Factory.2025. Android WebView + DataBinding Tutorial - Kotlin - 2021. [online]
+YoutTube Available at: https://youtu.be/4gDAZmLnVZY?si=eUhQy8saWaopm6Z0 [Accessed 31 October 2025].
+Tadas Petra.2024. Understanding MVVM Docs by Building a Firebase Counter App. [online] www.youtube.com.
+Available at: https://www.youtube.com/watch?v=JiBE1U5u_QU [Accessed 31 October 2025].
+QCT.2023. Javascript Text Search Highlight | Quick Tutorial. [online]
+YoutTube Available at: https://youtu.be/lGSNJBujYpw?si=IIvBOl4nZ_STUS6J [Accessed 31 October 2025].

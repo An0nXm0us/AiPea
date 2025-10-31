@@ -39,4 +39,8 @@ class FakeCalendarDao : CalendarDao {
                         it.eventDate.before(endDate)
             }
         }
+
+    override suspend fun getAnyEvent(userId: String): CalendarSchedule? {
+        return events.firstOrNull { it.event_userId == userId }
+    }
 }

@@ -74,6 +74,7 @@ class HomePage : AppCompatActivity() {
             openQuizFront()
         }
 
+
         // Log Out Button
         logOut.setOnClickListener {
             sessionManager.clearSession()
@@ -137,6 +138,7 @@ class HomePage : AppCompatActivity() {
     }
 
     private fun openQuizFront() {
-        Toast.makeText(this, "Quiz feature coming soon!", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, QuizHome::class.java)
+        startActivity(intent)
     }
 }

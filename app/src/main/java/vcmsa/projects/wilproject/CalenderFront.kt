@@ -34,12 +34,12 @@ class CalenderFront : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
 
     private lateinit var sessionManager: SessionManager
-
+//(Islam, 2025)
     private val viewModel: CalendarViewModel by lazy {
 
-        val database = EddieDatabase.getDatabase(applicationContext) // Database created locally
+        val database = EddieDatabase.getDatabase(applicationContext)
         val calendarDao = database.calenderDao()
-        val firebaseConnect = FirebaseDB() // Placeholder for Firebase connection
+        val firebaseConnect = FirebaseDB()
 
         val calendarRepository = CalendarRepos(calendarDao, firebaseConnect)
 
@@ -129,7 +129,7 @@ class CalenderFront : AppCompatActivity() {
             adapter = eventsAdapter
         }
     }
-
+//(Islam, 2025)
     private fun setupFilterSpinner() {
         val adapter = ArrayAdapter.createFromResource(
             this@CalenderFront,
@@ -159,7 +159,7 @@ class CalenderFront : AppCompatActivity() {
             showAddEventDialog()
         }
     }
-
+//show event dialog (Islam, 2025)
     private fun showAddEventDialog() {
         val dialogView = LayoutInflater.from(this@CalenderFront).inflate(R.layout.event_dialog, null)
         val dialog = AlertDialog.Builder(this@CalenderFront)
@@ -197,7 +197,7 @@ class CalenderFront : AppCompatActivity() {
 
         dialog.show()
     }
-
+//(Islam, 2025)
     private fun updateSelectedDateText(date: Date) {
         val dateFormat = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
         selectedDateText.text = "Events for ${dateFormat.format(date)}"

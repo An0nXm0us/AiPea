@@ -14,6 +14,11 @@ import vcmsa.projects.wilproject.event.UserEvent
 import vcmsa.projects.wilproject.state.UserState
 import java.security.MessageDigest
 
+/**
+ * This view model will be using both its repective dao and repo methods to save locally and on firebase
+ * (Tadas Petra.2024 & Philipp Lackner,2023)
+ * The state wil be used and reflected on ui (Philipp Lackner,2022)
+ **/
 class UserViewModel(private val repository: UserRepo) : ViewModel() {
     private val _userState = MutableStateFlow(UserState())
     val userState = _userState.asStateFlow()
@@ -25,6 +30,7 @@ class UserViewModel(private val repository: UserRepo) : ViewModel() {
             }
         }
     }
+    //hasing password(SSOJet,2028)
     fun hasPass(hashPassword : String): String
     {
         val bytes = hashPassword.toByteArray(Charsets.UTF_8)

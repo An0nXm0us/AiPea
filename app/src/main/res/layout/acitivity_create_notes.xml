@@ -1,104 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF">
+    android:background="#FAFAFA"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
-    >
+        android:paddingBottom="24dp">
 
-        <!-- Top Bar -->
+        <!-- Modern App Bar -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/green">
+            android:layout_height="64dp"
+            android:background="@color/finalGreen"
+            android:elevation="4dp"
+            android:paddingHorizontal="16dp">
 
             <ImageView
                 android:id="@+id/btnClose"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="16dp"
                 android:src="@drawable/ic_close"
                 app:tint="@android:color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
                 android:text="Create Note"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02" />
+
         </RelativeLayout>
-        <!-- Create Notes Button -->
 
-        <!-- Filter Buttons -->
-        <Button
-            android:id="@+id/btn_create_notes"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_create_button"
-            android:drawableEnd="@drawable/ic_arrow_right"
-            android:drawablePadding="8dp"
-            android:text="Create Notes"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
-
+        <!-- Content Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/form_background"
-            android:elevation="4dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp">
 
-
-            android:padding="16dp">
-
+            <!-- Primary Action Button - Enhanced -->
             <Button
-                style="@style/FilterButtonStyle"
-                android:text="Class Section"
-                tools:ignore="TouchTargetSizeCheck" />
+                android:id="@+id/btn_create_notes"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_primary_button"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawablePadding="8dp"
+                android:text="Create Notes"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+              />
 
-            <Button
-                style="@style/FilterButtonStyle"
-                android:layout_marginStart="8dp"
-                android:text="Subject"
-                tools:ignore="TouchTargetSizeCheck" />
+            <!-- Filter Section with Card Style -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_marginBottom="24dp">
 
-            <Button
-                style="@style/FilterButtonStyle"
-                android:layout_marginStart="8dp"
-                android:text="Note Name"
-                tools:ignore="TouchTargetSizeCheck" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Filter By"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_filter_button"
+                        android:text="Class Section"
+                        android:textAllCaps="false"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_filter_button"
+                        android:text="Subject"
+                        android:textAllCaps="false"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_filter_button"
+                        android:text="Note Name"
+                        android:textAllCaps="false"
+                        android:textColor="#333333"
+                        android:textSize="14sp"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Notes Section Header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Your Notes"
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02" />
+
+            <!-- Notes Cards -->
+            <include layout="@layout/item_note_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <include layout="@layout/item_note_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <include layout="@layout/item_note_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
         </LinearLayout>
-
-        <!-- Notes Cards -->
-        <include layout="@layout/item_note_card"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:tag="fa1" />
-
-        <include layout="@layout/item_note_card"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:tag="term1" />
-
-        <include layout="@layout/item_note_card"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:tag="fa2" />
-
     </LinearLayout>
 </ScrollView>

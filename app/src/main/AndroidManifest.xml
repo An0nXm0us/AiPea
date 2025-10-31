@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -13,6 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WILPROJECT"
         tools:targetApi="31">
+        <activity
+            android:name=".QuizActivity"
+            android:exported="false"
+            android:label="Quiz" />
+
+        <activity
+            android:name=".ResultActivity"
+            android:exported="false"
+            android:label="Result" />
+        <activity
+            android:name=".QuizHome"
+            android:exported="false" />
         <activity
             android:name=".TextbookList"
             android:exported="false" />
@@ -57,15 +71,14 @@
             android:exported="false" />
         <activity
             android:name=".BookReaderActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".EpubViewerActivity"
-            android:exported="false"
-            />
+            android:exported="false" />
         <activity
             android:name=".PdfViewerActivity"
-            android:exported="false"
-            />
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="cmt.projects.subproject.file provider"
@@ -75,6 +88,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

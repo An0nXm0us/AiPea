@@ -11,15 +11,20 @@ import vcmsa.projects.wilproject.dao.NotesDao
 import vcmsa.projects.wilproject.models.User
 import vcmsa.projects.wilproject.dao.UserDao
 import vcmsa.projects.wilproject.dao.CalendarDao
+import vcmsa.projects.wilproject.dao.ScoreDao
 import vcmsa.projects.wilproject.models.CalendarSchedule
-
-@Database(entities = [User::class, Notes::class, CalendarSchedule::class], version = 2, exportSchema = false)
+import vcmsa.projects.wilproject.models.ScoreEntity
+//This class defines the database schema locally (Philipp Lackner,2022)
+@Database(entities = [User::class, Notes::class, CalendarSchedule::class, ScoreEntity::class], version = 2, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class EddieDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun notesDao(): NotesDao
     abstract fun calenderDao(): CalendarDao
+
+    abstract fun scoreDao(): ScoreDao
+
 
     companion object {
         @Volatile

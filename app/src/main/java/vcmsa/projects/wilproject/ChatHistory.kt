@@ -12,7 +12,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import vcmsa.projects.wilproject.adapter.ChatAdapter
 import vcmsa.projects.wilproject.db.ChatDatabaseHelper
 import vcmsa.projects.wilproject.models.ChatSession
-
+//Shows chat history (Google AI for Developers, (n.d.))
 class ChatHistory : AppCompatActivity() {
     private lateinit var chatRecyclerView: RecyclerView
     private lateinit var newChatButton: FloatingActionButton
@@ -118,8 +118,7 @@ class ChatHistory : AppCompatActivity() {
     }
 
     private fun showEmptyState() {
-        // You can add an empty state view here if needed
-        // For now, we'll just leave it empty
+
     }
 
     private fun createNewChat() {

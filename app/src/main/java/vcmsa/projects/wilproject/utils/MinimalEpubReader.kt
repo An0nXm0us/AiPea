@@ -11,22 +11,26 @@ import javax.xml.parsers.DocumentBuilderFactory
 object MinimalEpubReader {
     private const val TAG = "MinimalEpubReader"
 
+    //Main function to extract and combine EPUB content into a single HTML string (Codes Easy ,2021 & The Android Factory,2025)
     fun getEpubHtmlContent(epubFile: File, cacheDir: File): Pair<String, File>? {
         Log.d(TAG, "Starting EPUB processing for: ${epubFile.name}")
 
+        // Create a directory for extraction.
         val extractedDir = File(cacheDir, "epub_${epubFile.nameWithoutExtension}_${System.currentTimeMillis()}")
         if (!extractedDir.mkdirs()) {
             Log.e(TAG, "Failed to create extraction directory: ${extractedDir.absolutePath}")
             return null
         }
 
+        //  Unzip the EPUB file.
         if (!unzipEpub(epubFile, extractedDir)) {
             Log.e(TAG, "Failed to unzip EPUB file.")
-            extractedDir.deleteRecursively()
+            extractedDir.deleteRecursively() // Clean up on failure
             return null
         }
         Log.d(TAG, "EPUB successfully extracted to: ${extractedDir.absolutePath}")
 
+        // Find the primary content file
         val containerFile = File(extractedDir, "META-INF/container.xml")
         val contentFilePath = findContentFilePath(containerFile)
         if (contentFilePath == null) {
@@ -38,6 +42,7 @@ object MinimalEpubReader {
         val epubRoot = containerFile.parentFile.parentFile
         val contentFile = File(epubRoot, contentFilePath)
 
+        // 4. Combine all individual chapter HTML files into one string.
         val combinedHtml = combineChapterHtml(contentFile, epubRoot)
 
         return if (combinedHtml != null) {
@@ -45,24 +50,32 @@ object MinimalEpubReader {
             Pair(combinedHtml, extractedDir)
         } else {
             Log.e(TAG, "Failed to combine chapter HTML.")
-            extractedDir.deleteRecursively()
+            extractedDir.deleteRecursively() // Clean up on failure
             null
         }
     }
 
+    /**
+     * Extracts the contents of the zip file (EPUB)
+     */
     private fun unzipEpub(zipFile: File, destinationDir: File): Boolean {
         try {
+            // Use ZipInputStream to read the compressed data.
             ZipInputStream(FileInputStream(zipFile)).use { zipInputStream ->
                 var zipEntry: ZipEntry?
                 val buffer = ByteArray(1024)
                 while (zipInputStream.nextEntry.also { zipEntry = it } != null) {
                     val newFile = File(destinationDir, zipEntry!!.name)
+
+                    // Handle directories explicitly.
                     if (zipEntry!!.isDirectory) {
                         newFile.mkdirs()
                         continue
                     }
+
                     newFile.parentFile?.mkdirs()
 
+                    // Write the file contents.
                     FileOutputStream(newFile).use { fileOutputStream ->
                         var count: Int
                         while (zipInputStream.read(buffer).also { count = it } != -1) {
@@ -83,6 +96,7 @@ object MinimalEpubReader {
         return try {
             val factory = DocumentBuilderFactory.newInstance()
             val builder = factory.newDocumentBuilder()
+            // Parse the XML document.
             val doc = builder.parse(containerFile)
 
             val rootfiles = doc.getElementsByTagName("rootfile")
@@ -97,15 +111,19 @@ object MinimalEpubReader {
         }
     }
 
+    //Reads the OPF file  to find all chapter files in the correct reading order (Codes Easy ,2021)
+
     private fun combineChapterHtml(contentFile: File, epubRoot: File): String? {
         try {
             val factory = DocumentBuilderFactory.newInstance()
             val builder = factory.newDocumentBuilder()
+            // Parse the OPF XML document.
             val doc = builder.parse(contentFile)
 
             val chapterIds = mutableListOf<String>()
             val itemMap = mutableMapOf<String, String>()
 
+            // Read the manifest section to map element id to their file paths.
             val manifest = doc.getElementsByTagName("manifest").item(0)
             val items = manifest.childNodes
             for (i in 0 until items.length) {
@@ -119,6 +137,7 @@ object MinimalEpubReader {
                 }
             }
 
+            // Read the spine section to determine the correct reading order.
             val spine = doc.getElementsByTagName("spine").item(0)
             val itemrefs = spine.childNodes
             for (i in 0 until itemrefs.length) {
@@ -134,7 +153,7 @@ object MinimalEpubReader {
             val opfPath = contentFile.parentFile.relativeTo(epubRoot).path.replace(File.separatorChar, '/') + "/"
 
             val htmlBuilder = StringBuilder()
-
+            //(Codes Easy ,2021)
             htmlBuilder.append("""
                 <html>
                 <head>
@@ -153,6 +172,7 @@ object MinimalEpubReader {
                 <body>
             """.trimIndent())
 
+            // Go through the ordered chapter IDs and append their content.
             for (id in chapterIds) {
                 val chapterPath = itemMap[id]
                 if (chapterPath != null) {
@@ -182,10 +202,12 @@ object MinimalEpubReader {
                                 "href='$opfPath$originalHref'"
                             }
 
+                        // Wrap each chapter's content
                         htmlBuilder.append("<div id='chapter-$id' class='epub-chapter-container'>")
                         htmlBuilder.append(chapterContentWithLinksBase)
                         htmlBuilder.append("</div>")
 
+                        // Add a separator between chapters.
                         htmlBuilder.append("<br><hr style='border: 1px dashed #ccc;'><br>")
                     } else {
                         Log.w(TAG, "Chapter file not found: $chapterPath")
