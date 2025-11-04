@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="WILPROJECT.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-10-28T13:02:27.571363200Z">
+        <DropdownSelection timestamp="2025-11-04T12:54:47.104807700Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Neo\.android\avd\Pixel_8_Pro.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Neo\.android\avd\Pixel_8.avd" />
             </handle>
           </Target>
         </DropdownSelection>

@@ -27,7 +27,6 @@ class FirebaseDBTest {
     private lateinit var mockNotesRef: DatabaseReference
     private lateinit var mockChildRef: DatabaseReference
 
-    // --- Class Under Test ---
     private lateinit var firebaseDB: FirebaseDB
 
     @Before
@@ -41,7 +40,7 @@ class FirebaseDBTest {
         // Create instance of the class to test
         firebaseDB = FirebaseDB()
 
-        // --- Inject all private Firebase val members ---
+
         injectMock(firebaseDB, "auth", mockAuth)
         injectMock(firebaseDB, "usersRef", mockUsersRef)
         injectMock(firebaseDB, "notesRef", mockNotesRef)
@@ -96,7 +95,7 @@ class FirebaseDBTest {
         whenever(mockUsersRef.child(user.userId)).thenReturn(mockChildRef)
         whenever(mockChildRef.setValue(user)).thenReturn(voidTask)
 
-        // Act & Assert (verifies the call completes without exception)
+
         firebaseDB.saveUserToFirebase(user)
     }
 
@@ -121,10 +120,9 @@ class FirebaseDBTest {
         whenever(mockNotesRef.child(userId)).thenReturn(mockChildRef)
         whenever(mockChildRef.get()).thenReturn(successTask)
 
-        // Act
-        val actualNotes = firebaseDB.fetchNotesForUser(userId)
+       val actualNotes = firebaseDB.fetchNotesForUser(userId)
 
-        // Assert
+
         assert(expectedNotes.size == actualNotes.size)
         assert(actualNotes.containsAll(expectedNotes))
     }
