@@ -15,7 +15,7 @@ import vcmsa.projects.wilproject.dao.ScoreDao
 import vcmsa.projects.wilproject.models.CalendarSchedule
 import vcmsa.projects.wilproject.models.ScoreEntity
 //This class defines the database schema locally (Philipp Lackner,2022)
-@Database(entities = [User::class, Notes::class, CalendarSchedule::class, ScoreEntity::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Notes::class, CalendarSchedule::class, ScoreEntity::class], version = 3, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class EddieDatabase : RoomDatabase() {
 
